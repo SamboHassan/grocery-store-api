@@ -24,6 +24,110 @@ data = [
     },
 ]
 
+"""
+    URL: https://localhost/carts/:cartId/items
+
+    Method: POST
+
+    Body:
+    {
+        "productId": 4643,
+        "quantity": 2
+    }
+        
+    Response:
+    
+    {
+    "created": true,
+    "itemId": 68891739
+    },
+    201 created
+
+    Data Model: CartModel
+
+    Database: sqlite3
+   
+
+"""
+
+
+@app.route("/carts/<string:cart_id>/items", methods=["POST"])
+def add_item_to_cart(cart_id):
+    # Extract the request data
+    data = request.json
+
+    # Validate the request data
+    if "productId" not in data or "quantity" not in data:
+        return (
+            jsonify(
+                {"error": "Request must include 'productId' and 'quantity' parameters."}
+            ),
+            400,
+        )
+
+    # Dummy data for the item ID
+    item_id = 68891739
+
+    return jsonify({"created": True, "itemId": item_id}), 201
+
+
+@app.route("/carts/<string:cart_id>/items", methods=["GET"])
+def get_cart_items(cart_id):
+    # Dummy data for the cart items
+    cart_items = []
+
+    return jsonify(cart_items)
+
+
+@app.route("/carts/<string:cart_id>", methods=["GET"])
+def get_cart(cart_id):
+    # Dummy data for the cart
+    cart_data = {"items": [], "created": "2025-01-30T16:42:03.316Z"}
+
+    return jsonify(cart_data)
+
+
+@app.route("/carts", methods=["POST"])
+def create_cart():
+    # Generate a dummy cart ID
+    cart_id = "i8ZUFV6xg8l1nnBBwNA5-"
+
+    return jsonify({"created": True, "cartId": cart_id}), 201
+
+
+@app.route("/products/<int:product_id>", methods=["GET"])
+def get_product(product_id):
+    # Find the product with the given ID
+    product = next((item for item in data if item["id"] == product_id), None)
+
+    # Return a 404 error if the product is not found
+    if product is None:
+        return jsonify({"error": "Product not found."}), 404
+
+    return jsonify(product)
+
+
+@app.route("/products", methods=["POST"])
+def add_product():
+    # Extract the request data
+    data = request.json
+
+    # Validate the request data
+    if "category" not in data or "name" not in data or "inStock" not in data:
+        return (
+            jsonify(
+                {
+                    "error": "Request must include 'category', 'name', and 'inStock' parameters."
+                }
+            ),
+            400,
+        )
+
+    # Add the product to the data
+    data.append(data)
+
+    return jsonify(data), 201
+
 
 @app.route("/products", methods=["GET"])
 def get_products():
@@ -86,28 +190,6 @@ def get_api_key():
 
     # Return the API key
     return jsonify({"api_key": "my_api_key"})
-    """
-    URL: https://localhost/api-clients
-    Method: POST
-    Request Body:
-    {
-        "clientName": "my_client_id",
-        "clientClient": "my_client_email"
-    }
-    
-    Response:
-    error: 
-    {
-        "error": "API client already registered. Try a different email."
-    }
-    409 Conflict
-
-    success:
-    {   
-    "accessToken": "523da3d671c40b7885be046ed8aef74493c43eb067983e7f12b8d511bfda56e7"
-    }
-    201 created 
-    """
 
     @app.route("/api-clients", methods=["POST"])
     def register_api_client():
@@ -145,3 +227,26 @@ def get_api_key():
 
 if __name__ == "__main__":
     app.run(debug=True)
+
+
+"""
+    URL: https://localhost/products/:productId
+
+    Method: GET
+    Request Body:
+    {
+        "category": "coffee",
+        "name": "Starbucks Coffee Variety Pack, 100% Arabica",
+        "inStock": true,
+    }
+    
+    Response:
+    {
+    "id": 4643,
+    "category": "coffee",
+    "name": "Starbucks Coffee Variety Pack, 100% Arabica",
+    "inStock": true,
+    }
+    201 created
+
+     """
