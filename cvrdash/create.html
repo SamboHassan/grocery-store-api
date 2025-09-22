@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <meta name="csrf-token" content="6c2nL6pB3trqnRM4fDQpM4Qls2FwybA2VBD96OPZ">
+    <title>Register Voter - Continuous Voter Registration</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+                    <!-- Chart.js -->
+                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                <!-- Alpine.js -->
+                <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50:  '#f0fdf4',
+                            100: '#dcfce7',
+                            200: '#bbf7d0',
+                            300: '#86efac',
+                            400: '#4ade80',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            800: '#166534',
+                            900: '#14532d',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50 font-sans">
+    <div class="flex h-screen">
+         <!-- Left Sidebar -->
+         <!-- Left Sidebar -->
+                <div class="w-64 bg-white shadow-lg flex flex-col lg:relative fixed lg:translate-x-0 -translate-x-full transition-transform duration-300 z-50 h-full">
+            <!-- Logo Section -->
+           <div class="p-6 border-b border-gray-100 flex justify-center items-center">
+    <a href="https://cvrdashboardyobe.com/dashboard">
+        <img src="https://cvrdashboardyobe.com/assets/images/logo.png" alt="CVR Dashboard" class="w-16 h-16  mx-auto">
+    </a>
+</div>
+
+            <!-- Navigation -->
+            <nav class="flex-1 px-4 py-6">
+                <ul class="space-y-2">
+                    <li>
+                        <a href="https://cvrdashboardyobe.com/dashboard" class="flex items-center px-3 py-2 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors ">
+                            <i class="fas fa-home w-5 h-5 mr-3"></i>
+                            <span>Home</span>
+                        </a>
+                    </li>
+
+                    
+                    <li>
+                        <a href="https://cvrdashboardyobe.com/voters" class="flex items-center px-3 py-2 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors bg-primary-50 text-primary-600">
+                            <i class="fas fa-users w-5 h-5 mr-3"></i>
+                            <span>Voters</span>
+                            <div class="ml-auto">
+                                <button class="w-6 h-6 bg-primary-500 text-white rounded-full flex items-center justify-center text-xs hover:bg-primary-600 transition-colors">
+                                    <i class="fas fa-plus text-xs"></i>
+                                </button>
+                            </div>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="https://cvrdashboardyobe.com/issues" class="flex items-center px-3 py-2 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors ">
+                            <i class="fas fa-exclamation-triangle w-5 h-5 mr-3"></i>
+                            <span>Issues</span>
+                        </a>
+                    </li>
+
+                    
+                    <li>
+                        <a href="https://cvrdashboardyobe.com/profile" class="flex items-center px-3 py-2 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors ">
+                            <i class="fas fa-cog w-5 h-5 mr-3"></i>
+                            <span>Settings</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- Upgrade Section -->
+            <div class="p-4 border-t border-gray-100">
+                <div class="bg-gradient-to-r from-primary-500 to-primary-600 rounded-lg p-4 text-white text-center">
+                    <h3 class="font-semibold text-sm mb-1 text-center">Live Dashboard</h3>
+                    <p class="text-xs text-primary-100 mb-3 text-center">Auto Refresh Enabled</p>
+                    <a href="" class="w-full bg-white text-primary-600 py-2 px-3 rounded-lg text-sm font-bold shadow-lg shadow-primary-300/40 border-b-4 border-primary-700 hover:bg-gray-50 transition-all duration-200 transform hover:-translate-y-1 hover:scale-105 active:translate-y-0 active:scale-100 text-center">
+                        Refresh
+                    </a>
+                </div>
+            </div>
+
+            <!-- Bottom Links -->
+            <div class="p-4 border-t border-gray-100">
+                <ul class="space-y-2">
+
+                    <li>
+                        <a href="https://cvrdashboardyobe.com/logout" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="flex items-center px-3 py-2 text-gray-600 rounded-lg hover:bg-gray-100 transition-colors">
+                            <i class="fas fa-sign-out-alt w-5 h-5 mr-3"></i>
+                            <span class="text-sm">Log out</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Main Content Area -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <!-- Top Navigation Bar -->
+                        <header class="bg-white shadow-sm border-b border-gray-200">
+                <div class="flex items-center justify-between px-6 py-4">
+                    <div class="flex items-center space-x-4">
+                        <button class="lg:hidden text-gray-500 hover:text-gray-700" onclick="toggleSidebar()">
+                            <i class="fas fa-bars text-xl"></i>
+                        </button>
+                        <h1 class="text-xl font-semibold text-gray-800">Register Voter</h1>
+                    </div>
+
+                    <div class="flex items-center space-x-4">
+                        <!-- Notifications -->
+                        <div class="relative" x-data="{ notifyOpen: false }">
+                            <button @click="notifyOpen = !notifyOpen" class="relative p-2 text-gray-500 hover:text-gray-700 transition-colors focus:outline-none">
+                                <i class="fas fa-bell text-xl"></i>
+                                                                                            </button>
+                            <!-- Notification Dropdown -->
+                            <div x-show="notifyOpen" @click.away="notifyOpen = false" x-transition
+                                 class="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg border border-gray-100 z-50">
+                                <div class="px-4 py-3 border-b border-gray-100 flex items-center justify-between">
+                                    <span class="font-semibold text-gray-900">Notifications</span>
+                                    <form method="POST" action="https://cvrdashboardyobe.com/notifications/mark-all-read">
+                                        <input type="hidden" name="_token" value="6c2nL6pB3trqnRM4fDQpM4Qls2FwybA2VBD96OPZ" autocomplete="off">                                        <button type="submit" class="text-xs text-primary-600 hover:underline">Mark all as read</button>
+                                    </form>
+                                </div>
+                                <ul class="max-h-80 overflow-y-auto">
+                                                                        <li class="px-4 py-6 text-center text-gray-500 text-sm">No notifications found.</li>
+                                                                    </ul>
+                                <div class="px-4 py-2 text-right border-t border-gray-100">
+                                    <a href="https://cvrdashboardyobe.com/notifications" class="text-primary-600 text-xs hover:underline">View all</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- User Menu -->
+                        <div class="relative" x-data="{ open: false }">
+                            <button @click="open = !open" class="flex items-center space-x-3 text-gray-700 hover:text-gray-900 transition-colors focus:outline-none">
+                                <img src="https://ui-avatars.com/api/?name=Agent+2+-+Bade&background=3b82f6&color=fff&size=32" alt="Agent 2 - Bade" class="w-8 h-8 rounded-full">
+                                <span class="hidden md:block text-sm font-medium">Agent 2 - Bade</span>
+                                <i class="fas fa-chevron-down text-xs"></i>
+                            </button>
+                            <!-- Dropdown Menu -->
+                            <div x-show="open" @click.away="open = false" x-transition
+                                 class="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-gray-100 z-50">
+                                <div class="px-4 py-3 border-b border-gray-100">
+                                    <div class="flex items-center space-x-3">
+                                        <img src="https://ui-avatars.com/api/?name=Agent+2+-+Bade&background=3b82f6&color=fff&size=32" alt="Agent 2 - Bade" class="w-10 h-10 rounded-full">
+                                        <div>
+                                            <p class="font-semibold text-gray-900">Agent 2 - Bade</p>
+                                            <p class="text-xs text-gray-500">Agent</p>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <ul class="py-2">
+                                    <li>
+                                        <a href="https://cvrdashboardyobe.com/profile" class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-50 transition-colors">
+                                            <i class="fas fa-user mr-2"></i>Profile
+                                        </a>
+                                    </li>
+                                    
+                                    <li>
+                                        <a href="https://cvrdashboardyobe.com/logout" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="flex items-center px-4 py-2 text-red-600 hover:bg-red-50 transition-colors">
+                                            <i class="fas fa-sign-out-alt mr-2"></i>Log out
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            
+            <!-- Page Content -->
+            <main class="flex-1 overflow-auto">
+
+
+                <div class="space-y-6 m-4">
+    <!-- Header Section -->
+    <div class="bg-gradient-to-r from-red-100 to-red-200 rounded-lg p-8 mb-6 shadow-lg shadow-red-300/40 border-b-4 border-red-700 hover:bg-gray-50 transition-all duration-200 transform hover:-translate-y-1 hover:scale-100 active:translate-y-0 active:scale-100">
+        <div class="flex justify-between items-center">
+            <div>
+                <h1 class="text-2xl font-bold text-gray-900">Register New Voter</h1>
+                <p class="text-gray-600 mt-1">Add a new voter to the registration system</p>
+            </div>
+            <div class="flex gap-3">
+                <a href="https://cvrdashboardyobe.com/voters" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
+                    <i class="fas fa-arrow-left mr-2"></i>Back to List
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Registration Form -->
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+                <form method="POST" action="https://cvrdashboardyobe.com/voters" enctype="multipart/form-data" class="space-y-8">
+            <input type="hidden" name="_token" value="6c2nL6pB3trqnRM4fDQpM4Qls2FwybA2VBD96OPZ" autocomplete="off">
+            <!-- Personal Information -->
+            <div>
+                <h3 class="text-lg font-semibold text-gray-900 mb-6">Personal Information</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div>
+                        <label for="first_name" class="block text-sm font-medium text-gray-700 mb-2">First Name *</label>
+                        <input type="text" id="first_name" name="first_name" value="" required
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 "
+                               placeholder="Enter first name">
+                                            </div>
+
+                    <div>
+                        <label for="last_name" class="block text-sm font-medium text-gray-700 mb-2">Last Name *</label>
+                        <input type="text" id="last_name" name="last_name" value="" required
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 "
+                               placeholder="Enter last name">
+                                            </div>
+
+                    <div>
+                        <label for="middle_name" class="block text-sm font-medium text-gray-700 mb-2">Middle Name</label>
+                        <input type="text" id="middle_name" name="middle_name" value=""
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 "
+                               placeholder="Enter middle name (optional)">
+                                            </div>
+
+                    <div>
+                        <label for="date_of_birth" class="block text-sm font-medium text-gray-700 mb-2">Date of Birth *</label>
+                        <input type="date" id="date_of_birth" name="date_of_birth" value="" required
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 ">
+                                            </div>
+
+                    <div>
+                        <label for="gender" class="block text-sm font-medium text-gray-700 mb-2">Gender *</label>
+                        <select id="gender" name="gender" required
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 ">
+                            <option value="">Select Gender</option>
+                            <option value="male" >Male</option>
+                            <option value="female" >Female</option>
+                        </select>
+                                            </div>
+
+                    <div>
+                        <label for="phone" class="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
+                        <input type="tel" id="phone" name="phone" value=""
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 "
+                               placeholder="Enter phone number">
+                                            </div>
+
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+                        <input type="email" id="email" name="email" value=""
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 "
+                               placeholder="Enter email address">
+                                            </div>
+
+
+                    <div>
+                        <label for="voter_id" class="block text-sm font-medium text-gray-700 mb-2">Voter's ID</label>
+                        <input type="text" id="voter_id" name="voter_id" value=""
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 "
+                               placeholder="Enter voter's  ID ">
+                                            </div>
+                </div>
+            </div>
+
+            <!-- Address Information -->
+            <div>
+                <h3 class="text-lg font-semibold text-gray-900 mb-6">Address Information</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div>
+                        <label for="address" class="block text-sm font-medium text-gray-700 mb-2">Address *</label>
+                        <textarea id="address" name="address" rows="3" required
+                                  class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 "
+                                  placeholder="Enter full address"></textarea>
+                                            </div>
+
+                    <div>
+                        <label for="state_id" class="block text-sm font-medium text-gray-700 mb-2">State *</label>
+                        <select id="state_id" name="state_id" required
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 ">
+                            <option value="">Select State</option>
+                                                            <option value="1" >Yobe</option>
+                                                    </select>
+                                            </div>
+
+                    <div>
+                        <label for="lga_id" class="block text-sm font-medium text-gray-700 mb-2">LGA *</label>
+                        <select id="lga_id" name="lga_id" required
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 ">
+                            <option value="">Select LGA</option>
+                        </select>
+                                            </div>
+
+                    <div>
+                        <label for="ward_id" class="block text-sm font-medium text-gray-700 mb-2">Ward *</label>
+                        <div class="flex gap-2">
+                            <select id="ward_id" name="ward_id" required
+                                    class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 ">
+                                <option value="">Select Ward</option>
+                            </select>
+                            <button type="button" id="addWardBtn"
+                                    class="px-3 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                                            </div>
+
+                    <!-- Add Ward Modal -->
+                    <div id="addWardModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden overflow-y-auto h-full w-full z-50">
+                        <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+                            <div class="flex flex-col gap-4">
+                                <div class="flex items-center justify-between border-b pb-3">
+                                    <h3 class="text-lg font-semibold text-gray-900">Add New Ward</h3>
+                                    <button id="closeWardModal" class="text-gray-400 hover:text-gray-500">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+
+                                <div class="space-y-4">
+                                    <div>
+                                        <label for="new_ward_name" class="block text-sm font-medium text-gray-700 mb-1">Ward Name</label>
+                                        <input type="text" id="new_ward_name"
+                                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                                               placeholder="Enter ward name">
+                                    </div>
+                                    <div>
+                                        <label for="new_ward_code" class="block text-sm font-medium text-gray-700 mb-1">Ward Code</label>
+                                        <input type="text" id="new_ward_code"
+                                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                                               placeholder="Enter ward code">
+                                    </div>
+                                </div>
+
+                                <div class="flex justify-end gap-3 mt-4">
+                                    <button type="button" id="cancelAddWard"
+                                            class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
+                                        Cancel
+                                    </button>
+                                    <button type="button" id="saveWard"
+                                            class="px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors">
+                                        Save Ward
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="polling_unit_id" class="block text-sm font-medium text-gray-700 mb-2">Polling Unit *</label>
+                        <div class="flex gap-2">
+                        <select id="polling_unit_id" name="polling_unit_id" required
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 ">
+                            <option value="">Select Polling Unit</option>
+                        </select>
+                         <button type="button" id="addPollingUnitBtn"
+                                    class="px-3 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                                            </div>
+
+
+                    <!-- Add Polling Unit Modal -->
+                    <div id="addPollingUnitModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden overflow-y-auto h-full w-full z-50">
+                        <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+                            <div class="flex flex-col gap-4">
+                                <div class="flex items-center justify-between border-b pb-3">
+                                    <h3 class="text-lg font-semibold text-gray-900">Add New Polling Unit</h3>
+                                    <button id="closePollingUnitModal" class="text-gray-400 hover:text-gray-500">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+
+                                <div class="space-y-4">
+                                    <div>
+                                        <label for="new_pollingunit_name" class="block text-sm font-medium text-gray-700 mb-1">Polling Unit Name</label>
+                                        <input type="text" id="new_pollingunit_name"
+                                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                                               placeholder="Enter polling unit name">
+                                    </div>
+                                    <div>
+                                        <label for="new_pollingunit_code" class="block text-sm font-medium text-gray-700 mb-1">Polling Unit Code</label>
+                                        <input type="text" id="new_pollingunit_code"
+                                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                                               placeholder="Enter polling unit code">
+                                    </div>
+                                </div>
+
+                                <div class="flex justify-end gap-3 mt-4">
+                                    <button type="button" id="cancelAddPollingUnit"
+                                            class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
+                                        Cancel
+                                    </button>
+                                    <button type="button" id="savePollingUnit"
+                                            class="px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors">
+                                        Save
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Documents -->
+            <div>
+                <h3 class="text-lg font-semibold text-gray-900 mb-6">Documents (Optional)</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="photo" class="block text-sm font-medium text-gray-700 mb-2">Voter Photo</label>
+                        <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg hover:border-primary-400 transition-colors">
+                            <div class="space-y-1 text-center">
+                                <div class="flex flex-col items-center">
+                                    <i class="fas fa-camera text-gray-400 text-3xl mb-2"></i>
+                                    <div class="flex text-sm text-gray-600">
+                                        <label for="photo" class="relative cursor-pointer bg-white rounded-md font-medium text-primary-600 hover:text-primary-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-primary-500">
+                                            <span>Upload a photo</span>
+                                            <input id="photo" name="photo" type="file" class="sr-only" accept="image/*">
+                                        </label>
+                                        <p class="pl-1">or drag and drop</p>
+                                    </div>
+                                    <p class="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
+                                </div>
+                            </div>
+                        </div>
+                                            </div>
+
+                    <div>
+                        <label for="id_document" class="block text-sm font-medium text-gray-700 mb-2">ID Document</label>
+                        <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg hover:border-primary-400 transition-colors">
+                            <div class="space-y-1 text-center">
+                                <div class="flex flex-col items-center">
+                                    <i class="fas fa-file-alt text-gray-400 text-3xl mb-2"></i>
+                                    <div class="flex text-sm text-gray-600">
+                                        <label for="id_document" class="relative cursor-pointer bg-white rounded-md font-medium text-primary-600 hover:text-primary-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-primary-500">
+                                            <span>Upload document</span>
+                                            <input id="id_document" name="id_document" type="file" class="sr-only" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png">
+                                        </label>
+                                        <p class="pl-1">or drag and drop</p>
+                                    </div>
+                                    <p class="text-xs text-gray-500">PDF, DOC, JPG up to 10MB</p>
+                                </div>
+                            </div>
+                        </div>
+                                            </div>
+                </div>
+            </div>
+
+            <!-- Additional Information -->
+            <div>
+                <h3 class="text-lg font-semibold text-gray-900 mb-6">Additional Information</h3>
+                <div>
+                    <label for="notes" class="block text-sm font-medium text-gray-700 mb-2">Notes</label>
+                    <textarea id="notes" name="notes" rows="3"
+                              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 "
+                              placeholder="Any additional notes or comments"></textarea>
+                                    </div>
+            </div>
+
+            <!-- Form Actions -->
+            <div class="flex justify-end gap-4 pt-6 border-t border-gray-200">
+                <a href="https://cvrdashboardyobe.com/voters" class="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
+                    Cancel
+                </a>
+                <button type="submit" class="px-6 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors">
+                    <i class="fas fa-save mr-2"></i>Register Voter
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Logout Form -->
+        <form id="logout-form" action="https://cvrdashboardyobe.com/logout" method="POST" class="hidden">
+        <input type="hidden" name="_token" value="6c2nL6pB3trqnRM4fDQpM4Qls2FwybA2VBD96OPZ" autocomplete="off">    </form>
+    
+    <!-- Mobile Sidebar Overlay -->
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden hidden" onclick="toggleSidebar()"></div>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.w-64');
+            const overlay = document.getElementById('sidebar-overlay');
+
+            if (sidebar.classList.contains('-translate-x-full')) {
+                sidebar.classList.remove('-translate-x-full');
+                overlay.classList.remove('hidden');
+            } else {
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('hidden');
+            }
+        }
+
+        // Auto-hide alerts after 5 seconds
+        setTimeout(function() {
+            const alerts = document.querySelectorAll('.m-4');
+            alerts.forEach(function(alert) {
+                if (alert.querySelector('.bg-green-50, .bg-red-50, .bg-yellow-50')) {
+                    alert.remove();
+                }
+            });
+        }, 5000);
+    </script>
+
+                    <script>
+    const url = "https://cvrdashboardyobe.com";
+// Cascading dropdowns for location
+document.getElementById('state_id').addEventListener('change', function() {
+    const stateId = this.value;
+    const lgaSelect = document.getElementById('lga_id');
+    const wardSelect = document.getElementById('ward_id');
+    const pollingUnitSelect = document.getElementById('polling_unit_id');
+
+    // Clear dependent dropdowns
+    lgaSelect.innerHTML = '<option value="">Select LGA</option>';
+    wardSelect.innerHTML = '<option value="">Select Ward</option>';
+    pollingUnitSelect.innerHTML = '<option value="">Select Polling Unit</option>';
+
+
+
+    if (stateId) {
+        fetch(url+`/api/states/${stateId}/lgas`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(lgas => {
+                lgas.forEach(lga => {
+                    const option = document.createElement('option');
+                    option.value = lga.id;
+                    option.textContent = lga.name;
+                    lgaSelect.appendChild(option);
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching LGAs:', error);
+                alert('Error loading LGAs. Please try again.');
+            });
+    }
+});
+
+document.getElementById('lga_id').addEventListener('change', function() {
+    const lgaId = this.value;
+    const wardSelect = document.getElementById('ward_id');
+    const pollingUnitSelect = document.getElementById('polling_unit_id');
+     const url = "https://cvrdashboardyobe.com";
+    // Clear dependent dropdowns
+    wardSelect.innerHTML = '<option value="">Select Ward</option>';
+    pollingUnitSelect.innerHTML = '<option value="">Select Polling Unit</option>';
+
+    if (lgaId) {
+        fetch(url+`/api/wards/${lgaId}`)
+            .then(response => response.json())
+            .then(wards => {
+                wards.forEach(ward => {
+                    const option = document.createElement('option');
+                    option.value = ward.id;
+                    option.textContent = ward.name;
+                    wardSelect.appendChild(option);
+                });
+            });
+    }
+});
+
+document.getElementById('ward_id').addEventListener('change', function() {
+    const wardId = this.value;
+    const pollingUnitSelect = document.getElementById('polling_unit_id');
+    const url = "https://cvrdashboardyobe.com";
+    // Clear dependent dropdown
+    pollingUnitSelect.innerHTML = '<option value="">Select Polling Unit</option>';
+
+    if (wardId) {
+        fetch(url+`/api/polling-units/${wardId}`)
+            .then(response => response.json())
+            .then(pollingUnits => {
+                pollingUnits.forEach(pollingUnit => {
+                    const option = document.createElement('option');
+                    option.value = pollingUnit.id;
+                    option.textContent = pollingUnit.name;
+                    pollingUnitSelect.appendChild(option);
+                });
+            });
+    }
+});
+
+// File upload preview
+document.getElementById('photo').addEventListener('change', function() {
+    const file = this.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            // You can add image preview functionality here
+            console.log('Photo selected:', file.name);
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
+document.getElementById('id_document').addEventListener('change', function() {
+    const file = this.files[0];
+    if (file) {
+        console.log('Document selected:', file.name);
+    }
+});
+
+// Ward Modal Handling
+const addWardBtn = document.getElementById('addWardBtn');
+const wardModal = document.getElementById('addWardModal');
+const closeWardModal = document.getElementById('closeWardModal');
+const cancelAddWard = document.getElementById('cancelAddWard');
+const saveWard = document.getElementById('saveWard');
+const newWardName = document.getElementById('new_ward_name');
+const newWardCode = document.getElementById('new_ward_code');
+
+
+function showWardModal() {
+    wardModal.classList.remove('hidden');
+}
+
+function hideWardModal() {
+    wardModal.classList.add('hidden');
+    newWardName.value = '';
+    newWardCode.value = '';
+}
+
+addWardBtn.addEventListener('click', () => {
+    const lgaId = document.getElementById('lga_id').value;
+    if (!lgaId) {
+        alert('Please select an LGA first');
+        return;
+    }
+    showWardModal();
+});
+
+closeWardModal.addEventListener('click', hideWardModal);
+cancelAddWard.addEventListener('click', hideWardModal);
+
+// Close modal when clicking outside
+wardModal.addEventListener('click', (e) => {
+    if (e.target === wardModal) {
+        hideWardModal();
+    }
+});
+
+saveWard.addEventListener('click', async () => {
+    const lgaId = document.getElementById('lga_id').value;
+    const name = newWardName.value.trim();
+    const code = newWardCode.value.trim();
+
+     if (!lgaId) {
+        alert('Please enter select LGA first');
+        return;
+    }
+
+
+    if (!name) {
+        alert('Please enter ward name');
+        return;
+    }
+
+    if (!code) {
+        alert('Please enter ward code');
+        return;
+    }
+
+    try {
+        const response = await fetch(url+'/api/wards', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+            },
+            body: JSON.stringify({
+                name,
+                code,
+                lga_id: lgaId
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to create ward');
+        }
+
+        const ward = await response.json();
+
+        // Add the new ward to the select dropdown
+        const wardSelect = document.getElementById('ward_id');
+        const option = document.createElement('option');
+        option.value = ward.id;
+        option.textContent = ward.name;
+        wardSelect.appendChild(option);
+        wardSelect.value = ward.id;
+
+        hideWardModal();
+        alert('Ward created successfully');
+    } catch (error) {
+        console.error('Error creating ward:', error);
+        alert('Failed to create ward. Please try again.');
+    }
+});
+
+
+
+
+// Polling Unit Modal Handling
+const addPollingUnitBtn = document.getElementById('addPollingUnitBtn');
+const pollingUnitModal = document.getElementById('addPollingUnitModal');
+const closePollingUnitModal = document.getElementById('closePollingUnitModal');
+const cancelAddPollingUnit = document.getElementById('cancelAddPollingUnit');
+const savePollingUnit = document.getElementById('savePollingUnit');
+const newPollingUnitName = document.getElementById('new_pollingunit_name');
+const newPollingUnitCode = document.getElementById('new_pollingunit_code');
+
+
+function showPollingUnitModal() {
+    pollingUnitModal.classList.remove('hidden');
+}
+
+function hidePollingUnitModal() {
+    pollingUnitModal.classList.add('hidden');
+    newPollingUnitName.value = '';
+    newPollingUnitCode.value = '';
+}
+
+addPollingUnitBtn.addEventListener('click', () => {
+    const wardId = document.getElementById('ward_id').value;
+    if (!wardId) {
+        alert('Please select an Ward first');
+        return;
+    }
+    showPollingUnitModal();
+});
+
+closePollingUnitModal.addEventListener('click', hidePollingUnitModal);
+cancelAddPollingUnit.addEventListener('click', hidePollingUnitModal);
+
+// Close modal when clicking outside
+pollingUnitModal.addEventListener('click', (e) => {
+    if (e.target === pollingUnitModal) {
+        hidePollingUnitModal();
+    }
+});
+
+savePollingUnit.addEventListener('click', async () => {
+    const wardId = document.getElementById('ward_id').value;
+    const name = newPollingUnitName.value.trim();
+    const code = newPollingUnitCode.value.trim();
+
+     if (!wardId) {
+        alert('Please enter select Ward first');
+        return;
+    }
+
+
+    if (!name) {
+        alert('Please enter Polling Unit name');
+        return;
+    }
+
+    if (!code) {
+        alert('Please enter Polling Unit code');
+        return;
+    }
+
+    try {
+        const response = await fetch(url+'/api/polling-unit', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+            },
+            body: JSON.stringify({
+                name,
+                code,
+                ward_id: wardId
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to create Polling Unit');
+        }
+
+        const pollingUnit = await response.json();
+
+        // Add the new PollingUnit to the select dropdown
+        const pollingUnitSelect = document.getElementById('polling_unit_id');
+        const option = document.createElement('option');
+        option.value = pollingUnit.id;
+        option.textContent = pollingUnit.name;
+        pollingUnitSelect.appendChild(option);
+        pollingUnitSelect.value = pollingUnit.id;
+
+        hidePollingUnitModal();
+        alert('Polling Unit created successfully');
+    } catch (error) {
+        console.error('Error creating Polling Unit:', error);
+        alert('Failed to create ward. Please try again.');
+    }
+});
+
+// Form validation
+document.querySelector('form').addEventListener('submit', function(e) {
+    const requiredFields = this.querySelectorAll('[required]');
+    let isValid = true;
+
+    requiredFields.forEach(field => {
+        if (!field.value.trim()) {
+            field.classList.add('border-red-300', 'focus:ring-red-500', 'focus:border-red-500');
+            isValid = false;
+        } else {
+            field.classList.remove('border-red-300', 'focus:ring-red-500', 'focus:border-red-500');
+        }
+    });
+
+    if (!isValid) {
+        e.preventDefault();
+        alert('Please fill in all required fields.');
+    }
+});
+</script>
+                <script src="https://cvrdashboardyobe.com/vendor/livewire/livewire.min.js?id=df3a17f2"   data-csrf="6c2nL6pB3trqnRM4fDQpM4Qls2FwybA2VBD96OPZ" data-update-uri="/livewire/update" data-navigate-once="true"></script>
+            </body>
+            </html>

@@ -1,0 +1,28 @@
+0. http://127.0.0.1:5500/cvrdash/index.html
+
+1. https://cvrdashboardyobe.com/login 
+2. https://cvrdashboardyobe.com/     -  Index, b4 Home is clicked
+3. https://cvrdashboardyobe.com/dashboard   - when Home was clicked 
+
+4. https://cvrdashboardyobe.com/voters
+5. https://cvrdashboardyobe.com/voters/create 
+
+6. https://cvrdashboardyobe.com/profile 
+
+7. https://cvrdashboardyobe.com/logout 
+
+8. https://cvrdashboardyobe.com/governor
+
+
+
+https://cvrdashboardyobe.com/governor/chart-data?period=all
+
+
+cdn.tailwindcss.com should not be used in production. To use Tailwind CSS in production, install it as a PostCSS plugin or use the Tailwind CLI: https://tailwindcss.com/docs/installation
+(anonymous) @ (index):64Understand this warning 
+
+(index):64 cdn.tailwindcss.com should not be used in production. To use Tailwind CSS in production, install it as a PostCSS plugin or use the Tailwind CLI: https://tailwindcss.com/docs/installation
+(anonymous) @ (index):64Understand this warning
+index.js:26 Detected multiple instances of Alpine running
+
+

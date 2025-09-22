@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="csrf-token"
+      content="xEFhQdTzdNUkOBpqTNdoVcFaGBUTziPbFcOCLklt"
+    />
+    <title>Dashboard - Continuous Voter Registration</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Alpine.js -->
+    <script
+      defer
+      src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"
+    ></script>
+
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: {
+                50: "#f0fdf4",
+                100: "#dcfce7",
+                200: "#bbf7d0",
+                300: "#86efac",
+                400: "#4ade80",
+                500: "#22c55e",
+                600: "#16a34a",
+                700: "#15803d",
+                800: "#166534",
+                900: "#14532d",
+              },
+            },
+          },
+        },
+      };
+    </script>
+  </head>
+  <body class="bg-gray-50 font-sans">
+    <div class="flex h-screen">
+      <!-- Left Sidebar -->
+      <!-- Left Sidebar -->
+      <div
+        class="w-64 bg-white shadow-lg flex flex-col lg:relative fixed lg:translate-x-0 -translate-x-full transition-transform duration-300 z-50 h-full"
+      >
+        <!-- Logo Section -->
+        <div
+          class="p-6 border-b border-gray-100 flex justify-center items-center"
+        >
+          <a href="https://cvrdashboardyobe.com/dashboard">
+            <img
+              src="https://cvrdashboardyobe.com/assets/images/logo.png"
+              alt="CVR Dashboard"
+              class="w-16 h-16 mx-auto"
+            />
+          </a>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="flex-1 px-4 py-6">
+          <ul class="space-y-2">
+            <li>
+              <a
+                href="https://cvrdashboardyobe.com/dashboard"
+                class="flex items-center px-3 py-2 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors"
+              >
+                <i class="fas fa-home w-5 h-5 mr-3"></i>
+                <span>Home</span>
+              </a>
+            </li>
+
+            <li>
+              <a
+                href="https://cvrdashboardyobe.com/voters"
+                class="flex items-center px-3 py-2 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors"
+              >
+                <i class="fas fa-users w-5 h-5 mr-3"></i>
+                <span>Voters</span>
+                <div class="ml-auto">
+                  <button
+                    class="w-6 h-6 bg-primary-500 text-white rounded-full flex items-center justify-center text-xs hover:bg-primary-600 transition-colors"
+                  >
+                    <i class="fas fa-plus text-xs"></i>
+                  </button>
+                </div>
+              </a>
+            </li>
+
+            <li>
+              <a
+                href="https://cvrdashboardyobe.com/issues"
+                class="flex items-center px-3 py-2 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors"
+              >
+                <i class="fas fa-exclamation-triangle w-5 h-5 mr-3"></i>
+                <span>Issues</span>
+              </a>
+            </li>
+
+            <li>
+              <a
+                href="https://cvrdashboardyobe.com/profile"
+                class="flex items-center px-3 py-2 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors"
+              >
+                <i class="fas fa-cog w-5 h-5 mr-3"></i>
+                <span>Settings</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+
+        <!-- Upgrade Section -->
+        <div class="p-4 border-t border-gray-100">
+          <div
+            class="bg-gradient-to-r from-primary-500 to-primary-600 rounded-lg p-4 text-white text-center"
+          >
+            <h3 class="font-semibold text-sm mb-1 text-center">
+              Live Dashboard
+            </h3>
+            <p class="text-xs text-primary-100 mb-3 text-center">
+              Auto Refresh Enabled
+            </p>
+            <a
+              href=""
+              class="w-full bg-white text-primary-600 py-2 px-3 rounded-lg text-sm font-bold shadow-lg shadow-primary-300/40 border-b-4 border-primary-700 hover:bg-gray-50 transition-all duration-200 transform hover:-translate-y-1 hover:scale-105 active:translate-y-0 active:scale-100 text-center"
+            >
+              Refresh
+            </a>
+          </div>
+        </div>
+
+        <!-- Bottom Links -->
+        <div class="p-4 border-t border-gray-100">
+          <ul class="space-y-2">
+            <li>
+              <a
+                href="https://cvrdashboardyobe.com/logout"
+                onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+                class="flex items-center px-3 py-2 text-gray-600 rounded-lg hover:bg-gray-100 transition-colors"
+              >
+                <i class="fas fa-sign-out-alt w-5 h-5 mr-3"></i>
+                <span class="text-sm">Log out</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Main Content Area -->
+      <div class="flex-1 flex flex-col overflow-hidden">
+        <!-- Top Navigation Bar -->
+        <header class="bg-white shadow-sm border-b border-gray-200">
+          <div class="flex items-center justify-between px-6 py-4">
+            <div class="flex items-center space-x-4">
+              <button
+                class="lg:hidden text-gray-500 hover:text-gray-700"
+                onclick="toggleSidebar()"
+              >
+                <i class="fas fa-bars text-xl"></i>
+              </button>
+              <h1 class="text-xl font-semibold text-gray-800">Dashboard</h1>
+            </div>
+
+            <div class="flex items-center space-x-4">
+              <!-- Notifications -->
+              <div class="relative" x-data="{ notifyOpen: false }">
+                <button
+                  @click="notifyOpen = !notifyOpen"
+                  class="relative p-2 text-gray-500 hover:text-gray-700 transition-colors focus:outline-none"
+                >
+                  <i class="fas fa-bell text-xl"></i>
+                </button>
+                <!-- Notification Dropdown -->
+                <div
+                  x-show="notifyOpen"
+                  @click.away="notifyOpen = false"
+                  x-transition
+                  class="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg border border-gray-100 z-50"
+                >
+                  <div
+                    class="px-4 py-3 border-b border-gray-100 flex items-center justify-between"
+                  >
+                    <span class="font-semibold text-gray-900"
+                      >Notifications</span
+                    >
+                    <form
+                      method="POST"
+                      action="https://cvrdashboardyobe.com/notifications/mark-all-read"
+                    >
+                      <input
+                        type="hidden"
+                        name="_token"
+                        value="xEFhQdTzdNUkOBpqTNdoVcFaGBUTziPbFcOCLklt"
+                        autocomplete="off"
+                      />
+                      <button
+                        type="submit"
+                        class="text-xs text-primary-600 hover:underline"
+                      >
+                        Mark all as read
+                      </button>
+                    </form>
+                  </div>
+                  <ul class="max-h-80 overflow-y-auto">
+                    <li class="px-4 py-6 text-center text-gray-500 text-sm">
+                      No notifications found.
+                    </li>
+                  </ul>
+                  <div class="px-4 py-2 text-right border-t border-gray-100">
+                    <a
+                      href="https://cvrdashboardyobe.com/notifications"
+                      class="text-primary-600 text-xs hover:underline"
+                      >View all</a
+                    >
+                  </div>
+                </div>
+              </div>
+
+              <!-- User Menu -->
+              <div class="relative" x-data="{ open: false }">
+                <button
+                  @click="open = !open"
+                  class="flex items-center space-x-3 text-gray-700 hover:text-gray-900 transition-colors focus:outline-none"
+                >
+                  <img
+                    src="https://ui-avatars.com/api/?name=Agent+2+-+Bade&background=3b82f6&color=fff&size=32"
+                    alt="Agent 2 - Bade"
+                    class="w-8 h-8 rounded-full"
+                  />
+                  <span class="hidden md:block text-sm font-medium"
+                    >Agent 2 - Bade</span
+                  >
+                  <i class="fas fa-chevron-down text-xs"></i>
+                </button>
+                <!-- Dropdown Menu -->
+                <div
+                  x-show="open"
+                  @click.away="open = false"
+                  x-transition
+                  class="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-gray-100 z-50"
+                >
+                  <div class="px-4 py-3 border-b border-gray-100">
+                    <div class="flex items-center space-x-3">
+                      <img
+                        src="https://ui-avatars.com/api/?name=Agent+2+-+Bade&background=3b82f6&color=fff&size=32"
+                        alt="Agent 2 - Bade"
+                        class="w-10 h-10 rounded-full"
+                      />
+                      <div>
+                        <p class="font-semibold text-gray-900">
+                          Agent 2 - Bade
+                        </p>
+                        <p class="text-xs text-gray-500">Agent</p>
+                      </div>
+                    </div>
+                  </div>
+                  <ul class="py-2">
+                    <li>
+                      <a
+                        href="https://cvrdashboardyobe.com/profile"
+                        class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-50 transition-colors"
+                      >
+                        <i class="fas fa-user mr-2"></i>Profile
+                      </a>
+                    </li>
+
+                    <li>
+                      <a
+                        href="https://cvrdashboardyobe.com/logout"
+                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+                        class="flex items-center px-4 py-2 text-red-600 hover:bg-red-50 transition-colors"
+                      >
+                        <i class="fas fa-sign-out-alt mr-2"></i>Log out
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <!-- Page Content -->
+        <main class="flex-1 overflow-auto">
+          <div
+            wire:snapshot='{"data":{"totalVoters":7828,"approvedVoters":7805,"pendingVoters":10,"todayVoters":1,"chartPeriod":"all","lgaData":[null,{"keys":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],"class":"Illuminate\\Database\\Eloquent\\Collection","modelClass":"App\\Models\\Lga","s":"elcln"}],"yesterdayPending":0,"recentVoters":[null,{"keys":[86362,86271,86270],"class":"Illuminate\\Database\\Eloquent\\Collection","modelClass":"App\\Models\\Voter","s":"elcln"}],"trends":[[[{"date":"15","count":170},{"s":"arr"}],[{"date":"16","count":33},{"s":"arr"}],[{"date":"17","count":89},{"s":"arr"}],[{"date":"18","count":12},{"s":"arr"}],[{"date":"19","count":54},{"s":"arr"}],[{"date":"20","count":16},{"s":"arr"}],[{"date":"21","count":1},{"s":"arr"}]],{"s":"arr"}],"lastMonthTrends":[[1,51,158,30,31,67,4],{"s":"arr"}],"efficiency":100,"totalUsers":138,"activeUsers":138,"totalIssues":14,"openIssues":14,"paginators":[[],{"s":"arr"}]},"memo":{"id":"361Vk7rLYeFyuCZp27sG","name":"dashboard","path":"\/","method":"GET","children":[],"scripts":[],"assets":[],"errors":[],"locale":"en"},"checksum":"0da03e61e79c1ef87d773f3ebd6fd6f0128e857f229e3b25c293bb5155134d5b"}'
+            wire:effects='{"listeners":["refreshStats","echo:voter-updates,VoterRegistered"],"dispatches":[{"name":"updateChart","params":[{"labels":["Nguru","Potiskum","Bade","Gulani","Gujba","Nangere","Jakusko","Bursari","Machina","Fune","Fika","Geidam","Karasuwa","Yusufari","Yunusari","Damaturu","Tarmuwa"],"data":["13405","10018","7825","7051","5417","5212","5202","5198","5191","5186","3303","2743","2478","1877","1617","1053","585"]}]}]}'
+            wire:id="361Vk7rLYeFyuCZp27sG"
+            class="flex flex-col lg:flex-row gap-6 h-full m-2 sm:m-4"
+            wire:poll.5s="getPolling"
+            x-data="{ showNotification: false, notificationMessage: '', showMobileSidebar: false }"
+            @voter-registered.window="showNotification = true; notificationMessage = $event.detail.message; setTimeout(() => showNotification = false, 5000)"
+          >
+            <!-- Real-time Notification -->
+            <div
+              x-show="showNotification"
+              x-transition:enter="transition ease-out duration-300"
+              x-transition:enter-start="opacity-0 transform translate-y-2"
+              x-transition:enter-end="opacity-100 transform translate-y-0"
+              x-transition:leave="transition ease-in duration-200"
+              x-transition:leave-start="opacity-100 transform translate-y-0"
+              x-transition:leave-end="opacity-0 transform translate-y-2"
+              class="fixed top-4 right-4 z-50 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-3"
+            >
+              <i class="fas fa-check-circle"></i>
+              <span x-text="notificationMessage"></span>
+              <button
+                @click="showNotification = false"
+                class="ml-2 hover:text-green-200"
+              >
+                <i class="fas fa-times"></i>
+              </button>
+            </div>
+            <!-- Main Content Area -->
+            <div class="flex-1 flex flex-col gap-6">
+              <!-- Header Section -->
+              <div
+                class="bg-gradient-to-r from-green-100 to-green-200 rounded-lg p-8 mb-6 shadow-lg shadow-primary-300/40 border-b-4 border-primary-700 hover:bg-gray-50 transition-all duration-200 transform hover:-translate-y-1 hover:scale-100 active:translate-y-0 active:scale-100"
+              >
+                <div
+                  class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 sm:gap-0 mb-3"
+                >
+                  <h1 class="text-xl sm:text-2xl font-bold text-gray-900">
+                    Hello, Agent 2 - Bade
+                  </h1>
+                  <div class="flex items-center gap-2 text-gray-500">
+                    <i class="fas fa-calendar text-sm"></i>
+                    <span class="text-sm">21 Sep, 2025</span>
+                    <div class="flex items-center gap-1" wire:loading.remove>
+                      <div
+                        class="flex items-center justify-center bg-red-500 rounded-full px-5 py-3 animate-pulse shadow-md"
+                      >
+                        <i class="fas fa-circle text-white text-xs mr-2"></i>
+                        <span class="text-xs text-white font-semibold"
+                          >Live</span
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <p class="text-gray-600">
+                  Track voter registration progress here!
+                </p>
+              </div>
+
+              <!-- Mobile Sidebar -->
+              <div
+                x-show="showMobileSidebar"
+                x-transition:enter="transition ease-out duration-300"
+                x-transition:enter-start="opacity-0 transform translate-x-full"
+                x-transition:enter-end="opacity-100 transform translate-x-0"
+                x-transition:leave="transition ease-in duration-300"
+                x-transition:leave-start="opacity-100 transform translate-x-0"
+                x-transition:leave-end="opacity-0 transform translate-x-full"
+                class="fixed inset-0 z-50 lg:hidden"
+                @click.away="showMobileSidebar = false"
+              >
+                <div class="absolute inset-0 bg-gray-500 bg-opacity-75"></div>
+                <div
+                  class="fixed inset-y-0 right-0 w-full max-w-sm bg-white shadow-xl"
+                >
+                  <div class="p-6">
+                    <div class="flex items-center justify-between mb-6">
+                      <h3 class="text-lg font-semibold">Dashboard Menu</h3>
+                      <button
+                        @click="showMobileSidebar = false"
+                        class="text-gray-500 hover:text-gray-700"
+                      >
+                        <i class="fas fa-times"></i>
+                      </button>
+                    </div>
+                    <!-- Mobile User Profile -->
+                    <div class="mb-6">
+                      <img
+                        src="https://ui-avatars.com/api/?name=Agent+2+-+Bade&background=3b82f6&color=fff&size=80"
+                        alt="Agent 2 - Bade"
+                        class="w-20 h-20 rounded-full mx-auto mb-4"
+                      />
+                      <h4
+                        class="text-lg font-semibold text-gray-900 text-center mb-1"
+                      >
+                        Agent 2 - Bade
+                      </h4>
+                      <p class="text-sm text-gray-600 text-center mb-4">
+                        agent2-bade
+                      </p>
+                      <div class="flex items-center justify-center gap-2 mb-4">
+                        <span
+                          class="px-3 py-1 bg-primary-100 text-primary-800 rounded-full text-xs font-medium"
+                        >
+                          Agent
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- KPI Cards -->
+              <div
+                class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6"
+              >
+                <!-- Finished/Approved Card -->
+                <div
+                  class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-6 hover:shadow-md transition-shadow"
+                >
+                  <div class="flex items-center gap-4">
+                    <div
+                      class="w-12 h-12 bg-gradient-to-r from-green-500 to-green-600 rounded-xl flex items-center justify-center"
+                    >
+                      <i class="fas fa-thumbs-up text-white text-lg"></i>
+                    </div>
+                    <div class="flex-1">
+                      <div
+                        class="text-2xl font-bold text-gray-900"
+                        x-data="{ count: 0 }"
+                        x-init="count = 7805; $watch('count', value => { if (value !== 7805) { count = 7805 } })"
+                        x-text="count.toLocaleString()"
+                      ></div>
+                      <div class="text-sm text-gray-600">Approved</div>
+                      <div class="text-xs text-green-600 font-medium">
+                        +1 today
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Tracked/Pending Card -->
+                <div
+                  class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow"
+                >
+                  <div class="flex items-center gap-4">
+                    <div
+                      class="w-12 h-12 bg-gradient-to-r from-orange-500 to-orange-600 rounded-xl flex items-center justify-center"
+                    >
+                      <i class="fas fa-clock text-white text-lg"></i>
+                    </div>
+                    <div class="flex-1">
+                      <div class="text-2xl font-bold text-gray-900">10</div>
+                      <div class="text-sm text-gray-600">Pending</div>
+                      <div class="text-xs text-red-600 font-medium">
+                        -10 from yesterday
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Efficiency Card -->
+                <div
+                  class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow"
+                >
+                  <div class="flex items-center gap-4">
+                    <div
+                      class="w-12 h-12 bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl flex items-center justify-center"
+                    >
+                      <i class="fas fa-percentage text-white text-lg"></i>
+                    </div>
+                    <div class="flex-1">
+                      <div class="text-2xl font-bold text-gray-900">100%</div>
+                      <div class="text-sm text-gray-600">Efficiency</div>
+                      <div class="text-xs text-green-600 font-medium">
+                        +0% this week
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Additional Stats Cards -->
+              <div
+                class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6"
+              >
+                <!-- Total Voters -->
+                <div
+                  class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6"
+                >
+                  <div class="flex items-center justify-between">
+                    <div>
+                      <p class="text-sm text-gray-600">Total Voters</p>
+                      <p class="text-2xl font-bold text-gray-900">7,828</p>
+                    </div>
+                    <div
+                      class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center"
+                    >
+                      <i class="fas fa-users text-blue-600 text-xl"></i>
+                    </div>
+                  </div>
+                </div>
+
+                <!--[if BLOCK]> <!
+                [endif]--><!--[if ENDBLOCK]> <![endif]-->
+
+                <!-- Open Issues -->
+                <div
+                  class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6"
+                >
+                  <div class="flex items-center justify-between">
+                    <div>
+                      <p class="text-sm text-gray-600">Open Issues</p>
+                      <p class="text-2xl font-bold text-orange-600">14</p>
+                      <p class="text-xs text-gray-500">of 14 total</p>
+                    </div>
+                    <div
+                      class="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center"
+                    >
+                      <i
+                        class="fas fa-exclamation-triangle text-orange-600 text-xl"
+                      ></i>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Today's Activity -->
+                <div
+                  class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6"
+                >
+                  <div class="flex items-center justify-between">
+                    <div>
+                      <p class="text-sm text-gray-600">Today's Activity</p>
+                      <p class="text-2xl font-bold text-purple-600">1</p>
+                      <p class="text-xs text-green-600 font-medium">
+                        New registrations
+                      </p>
+                    </div>
+                    <div
+                      class="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center"
+                    >
+                      <i class="fas fa-chart-line text-purple-600 text-xl"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- LGA Registration Chart -->
+              <!--[if BLOCK]> <!
+              [endif]--><!--[if ENDBLOCK]> <![endif]-->
+
+              <!-- Current Tasks Section -->
+              <div
+                class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6"
+              >
+                <div
+                  class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 sm:gap-0 mb-6"
+                >
+                  <h3 class="text-lg font-semibold text-gray-900">
+                    Current Registrations
+                  </h3>
+                  <div class="flex items-center gap-4">
+                    <div class="text-sm text-gray-600">Done 100%</div>
+                  </div>
+                </div>
+                <div class="space-y-4">
+                  <!--[if BLOCK]> <![endif]-->
+                  <div
+                    class="flex items-center gap-4 p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors"
+                  >
+                    <div
+                      class="w-10 h-10 rounded-lg flex items-center justify-center text-white"
+                      style="background-color: #3b82f6"
+                    >
+                      <i class="fas fa-user text-sm"></i>
+                    </div>
+                    <div class="flex-1">
+                      <div class="font-medium text-gray-900">
+                        Mohammed Muhusin
+                      </div>
+                      <div class="flex items-center gap-3 mt-1">
+                        <div class="flex items-center gap-2">
+                          <div class="w-2 h-2 rounded-full bg-green-500"></div>
+                          <span class="text-xs text-gray-600">Approved</span>
+                        </div>
+                        <span class="text-xs text-gray-500">13 hours ago</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    class="flex items-center gap-4 p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors"
+                  >
+                    <div
+                      class="w-10 h-10 rounded-lg flex items-center justify-center text-white"
+                      style="background-color: #f59e0b"
+                    >
+                      <i class="fas fa-user text-sm"></i>
+                    </div>
+                    <div class="flex-1">
+                      <div class="font-medium text-gray-900">
+                        Mohammed Alhaji Abdulkarim
+                      </div>
+                      <div class="flex items-center gap-3 mt-1">
+                        <div class="flex items-center gap-2">
+                          <div class="w-2 h-2 rounded-full bg-green-500"></div>
+                          <span class="text-xs text-gray-600">Approved</span>
+                        </div>
+                        <span class="text-xs text-gray-500">23 hours ago</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    class="flex items-center gap-4 p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors"
+                  >
+                    <div
+                      class="w-10 h-10 rounded-lg flex items-center justify-center text-white"
+                      style="background-color: #1e40af"
+                    >
+                      <i class="fas fa-user text-sm"></i>
+                    </div>
+                    <div class="flex-1">
+                      <div class="font-medium text-gray-900">
+                        Khadija Ibrahim
+                      </div>
+                      <div class="flex items-center gap-3 mt-1">
+                        <div class="flex items-center gap-2">
+                          <div class="w-2 h-2 rounded-full bg-green-500"></div>
+                          <span class="text-xs text-gray-600">Approved</span>
+                        </div>
+                        <span class="text-xs text-gray-500">23 hours ago</span>
+                      </div>
+                    </div>
+                  </div>
+                  <!--[if ENDBLOCK]> <![endif]-->
+                </div>
+              </div>
+            </div>
+
+            <!--[if ENDBLOCK]> <![endif]-->
+          </div>
+
+          <script>
+            // Performance Chart
+            // LGA Registration Chart
+            let attendanceChart = new Chart(
+              document.getElementById("attendanceChart").getContext("2d"),
+              {
+                type: "bar",
+                data: {
+                  labels: [],
+                  datasets: [
+                    {
+                      label: "Registered Voters",
+                      data: [],
+                      backgroundColor: "#4f46e5",
+                      borderRadius: 8,
+                    },
+                  ],
+                },
+                options: {
+                  responsive: true,
+                  scales: {
+                    y: {
+                      beginAtZero: true,
+                    },
+                  },
+                  plugins: {
+                    legend: {
+                      position: "bottom",
+                    },
+                    tooltip: {
+                      backgroundColor: "#1f2937",
+                      padding: 12,
+                      bodyFont: {
+                        size: 13,
+                      },
+                      titleFont: {
+                        size: 13,
+                      },
+                    },
+                  },
+                },
+              }
+            );
+
+            // Function to load chart data
+            function loadChartData(period = "all") {
+              fetch(
+                `https://cvrdashboardyobe.com/governor/chart-data?period=${period}`
+              )
+                .then((response) => response.json())
+                .then((data) => {
+                  attendanceChart.data.labels = data.labels;
+                  attendanceChart.data.datasets[0].data = data.values;
+                  attendanceChart.update();
+                })
+                .catch((error) =>
+                  console.error("Error loading chart data:", error)
+                );
+            }
+
+            // Load initial data
+            loadChartData("all");
+
+            document.addEventListener("livewire:init", () => {});
+          </script>
+        </main>
+      </div>
+    </div>
+
+    <!-- Logout Form -->
+    <form
+      id="logout-form"
+      action="https://cvrdashboardyobe.com/logout"
+      method="POST"
+      class="hidden"
+    >
+      <input
+        type="hidden"
+        name="_token"
+        value="xEFhQdTzdNUkOBpqTNdoVcFaGBUTziPbFcOCLklt"
+        autocomplete="off"
+      />
+    </form>
+
+    <!-- Mobile Sidebar Overlay -->
+    <div
+      id="sidebar-overlay"
+      class="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden hidden"
+      onclick="toggleSidebar()"
+    ></div>
+
+    <script>
+      function toggleSidebar() {
+        const sidebar = document.querySelector(".w-64");
+        const overlay = document.getElementById("sidebar-overlay");
+
+        if (sidebar.classList.contains("-translate-x-full")) {
+          sidebar.classList.remove("-translate-x-full");
+          overlay.classList.remove("hidden");
+        } else {
+          sidebar.classList.add("-translate-x-full");
+          overlay.classList.add("hidden");
+        }
+      }
+
+      // Auto-hide alerts after 5 seconds
+      setTimeout(function () {
+        const alerts = document.querySelectorAll(".m-4");
+        alerts.forEach(function (alert) {
+          if (alert.querySelector(".bg-green-50, .bg-red-50, .bg-yellow-50")) {
+            alert.remove();
+          }
+        });
+      }, 5000);
+    </script>
+
+    <script
+      src="https://cvrdashboardyobe.com/vendor/livewire/livewire.min.js?id=df3a17f2"
+      data-csrf="xEFhQdTzdNUkOBpqTNdoVcFaGBUTziPbFcOCLklt"
+      data-update-uri="/livewire/update"
+      data-navigate-once="true"
+    ></script>
+  </body>
+</html>

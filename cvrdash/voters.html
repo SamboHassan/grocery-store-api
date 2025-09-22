@@ -1,0 +1,1894 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <meta name="csrf-token" content="6c2nL6pB3trqnRM4fDQpM4Qls2FwybA2VBD96OPZ">
+    <title>Voters - Continuous Voter Registration</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+                    <!-- Chart.js -->
+                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                <!-- Alpine.js -->
+                <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50:  '#f0fdf4',
+                            100: '#dcfce7',
+                            200: '#bbf7d0',
+                            300: '#86efac',
+                            400: '#4ade80',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            800: '#166534',
+                            900: '#14532d',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50 font-sans">
+    <div class="flex h-screen">
+         <!-- Left Sidebar -->
+         <!-- Left Sidebar -->
+                <div class="w-64 bg-white shadow-lg flex flex-col lg:relative fixed lg:translate-x-0 -translate-x-full transition-transform duration-300 z-50 h-full">
+            <!-- Logo Section -->
+           <div class="p-6 border-b border-gray-100 flex justify-center items-center">
+    <a href="https://cvrdashboardyobe.com/dashboard">
+        <img src="https://cvrdashboardyobe.com/assets/images/logo.png" alt="CVR Dashboard" class="w-16 h-16  mx-auto">
+    </a>
+</div>
+
+            <!-- Navigation -->
+            <nav class="flex-1 px-4 py-6">
+                <ul class="space-y-2">
+                    <li>
+                        <a href="https://cvrdashboardyobe.com/dashboard" class="flex items-center px-3 py-2 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors ">
+                            <i class="fas fa-home w-5 h-5 mr-3"></i>
+                            <span>Home</span>
+                        </a>
+                    </li>
+
+                    
+                    <li>
+                        <a href="https://cvrdashboardyobe.com/voters" class="flex items-center px-3 py-2 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors bg-primary-50 text-primary-600">
+                            <i class="fas fa-users w-5 h-5 mr-3"></i>
+                            <span>Voters</span>
+                            <div class="ml-auto">
+                                <button class="w-6 h-6 bg-primary-500 text-white rounded-full flex items-center justify-center text-xs hover:bg-primary-600 transition-colors">
+                                    <i class="fas fa-plus text-xs"></i>
+                                </button>
+                            </div>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="https://cvrdashboardyobe.com/issues" class="flex items-center px-3 py-2 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors ">
+                            <i class="fas fa-exclamation-triangle w-5 h-5 mr-3"></i>
+                            <span>Issues</span>
+                        </a>
+                    </li>
+
+                    
+                    <li>
+                        <a href="https://cvrdashboardyobe.com/profile" class="flex items-center px-3 py-2 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors ">
+                            <i class="fas fa-cog w-5 h-5 mr-3"></i>
+                            <span>Settings</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- Upgrade Section -->
+            <div class="p-4 border-t border-gray-100">
+                <div class="bg-gradient-to-r from-primary-500 to-primary-600 rounded-lg p-4 text-white text-center">
+                    <h3 class="font-semibold text-sm mb-1 text-center">Live Dashboard</h3>
+                    <p class="text-xs text-primary-100 mb-3 text-center">Auto Refresh Enabled</p>
+                    <a href="" class="w-full bg-white text-primary-600 py-2 px-3 rounded-lg text-sm font-bold shadow-lg shadow-primary-300/40 border-b-4 border-primary-700 hover:bg-gray-50 transition-all duration-200 transform hover:-translate-y-1 hover:scale-105 active:translate-y-0 active:scale-100 text-center">
+                        Refresh
+                    </a>
+                </div>
+            </div>
+
+            <!-- Bottom Links -->
+            <div class="p-4 border-t border-gray-100">
+                <ul class="space-y-2">
+
+                    <li>
+                        <a href="https://cvrdashboardyobe.com/logout" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="flex items-center px-3 py-2 text-gray-600 rounded-lg hover:bg-gray-100 transition-colors">
+                            <i class="fas fa-sign-out-alt w-5 h-5 mr-3"></i>
+                            <span class="text-sm">Log out</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Main Content Area -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <!-- Top Navigation Bar -->
+                        <header class="bg-white shadow-sm border-b border-gray-200">
+                <div class="flex items-center justify-between px-6 py-4">
+                    <div class="flex items-center space-x-4">
+                        <button class="lg:hidden text-gray-500 hover:text-gray-700" onclick="toggleSidebar()">
+                            <i class="fas fa-bars text-xl"></i>
+                        </button>
+                        <h1 class="text-xl font-semibold text-gray-800">Voters</h1>
+                    </div>
+
+                    <div class="flex items-center space-x-4">
+                        <!-- Notifications -->
+                        <div class="relative" x-data="{ notifyOpen: false }">
+                            <button @click="notifyOpen = !notifyOpen" class="relative p-2 text-gray-500 hover:text-gray-700 transition-colors focus:outline-none">
+                                <i class="fas fa-bell text-xl"></i>
+                                                                                            </button>
+                            <!-- Notification Dropdown -->
+                            <div x-show="notifyOpen" @click.away="notifyOpen = false" x-transition
+                                 class="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg border border-gray-100 z-50">
+                                <div class="px-4 py-3 border-b border-gray-100 flex items-center justify-between">
+                                    <span class="font-semibold text-gray-900">Notifications</span>
+                                    <form method="POST" action="https://cvrdashboardyobe.com/notifications/mark-all-read">
+                                        <input type="hidden" name="_token" value="6c2nL6pB3trqnRM4fDQpM4Qls2FwybA2VBD96OPZ" autocomplete="off">                                        <button type="submit" class="text-xs text-primary-600 hover:underline">Mark all as read</button>
+                                    </form>
+                                </div>
+                                <ul class="max-h-80 overflow-y-auto">
+                                                                        <li class="px-4 py-6 text-center text-gray-500 text-sm">No notifications found.</li>
+                                                                    </ul>
+                                <div class="px-4 py-2 text-right border-t border-gray-100">
+                                    <a href="https://cvrdashboardyobe.com/notifications" class="text-primary-600 text-xs hover:underline">View all</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- User Menu -->
+                        <div class="relative" x-data="{ open: false }">
+                            <button @click="open = !open" class="flex items-center space-x-3 text-gray-700 hover:text-gray-900 transition-colors focus:outline-none">
+                                <img src="https://ui-avatars.com/api/?name=Agent+2+-+Bade&background=3b82f6&color=fff&size=32" alt="Agent 2 - Bade" class="w-8 h-8 rounded-full">
+                                <span class="hidden md:block text-sm font-medium">Agent 2 - Bade</span>
+                                <i class="fas fa-chevron-down text-xs"></i>
+                            </button>
+                            <!-- Dropdown Menu -->
+                            <div x-show="open" @click.away="open = false" x-transition
+                                 class="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-gray-100 z-50">
+                                <div class="px-4 py-3 border-b border-gray-100">
+                                    <div class="flex items-center space-x-3">
+                                        <img src="https://ui-avatars.com/api/?name=Agent+2+-+Bade&background=3b82f6&color=fff&size=32" alt="Agent 2 - Bade" class="w-10 h-10 rounded-full">
+                                        <div>
+                                            <p class="font-semibold text-gray-900">Agent 2 - Bade</p>
+                                            <p class="text-xs text-gray-500">Agent</p>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <ul class="py-2">
+                                    <li>
+                                        <a href="https://cvrdashboardyobe.com/profile" class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-50 transition-colors">
+                                            <i class="fas fa-user mr-2"></i>Profile
+                                        </a>
+                                    </li>
+                                    
+                                    <li>
+                                        <a href="https://cvrdashboardyobe.com/logout" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="flex items-center px-4 py-2 text-red-600 hover:bg-red-50 transition-colors">
+                                            <i class="fas fa-sign-out-alt mr-2"></i>Log out
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            
+            <!-- Page Content -->
+            <main class="flex-1 overflow-auto">
+
+
+                <div class="space-y-6 m-4">
+    <!-- Header Section -->
+    <div class="bg-gradient-to-r from-orange-100 to-orange-200 rounded-lg p-8 mb-6 shadow-lg shadow-orange-300/40 border-b-4 border-orange-700 hover:bg-gray-50 transition-all duration-200 transform hover:-translate-y-1 hover:scale-100 active:translate-y-0 active:scale-100">
+        <div class="flex justify-between items-center">
+            <div>
+                <h1 class="text-2xl font-bold text-gray-900">Voter Management</h1>
+                <p class="text-gray-600 mt-1">Manage and track voter registrations across all regions</p>
+            </div>
+            <div class="flex gap-3">
+                
+                <a href="https://cvrdashboardyobe.com/voters/create" class="px-4 py-2 bg-primary-500 text-white rounded-xl font-bold shadow-lg shadow-primary-300/40 border-b-4 border-primary-700 hover:bg-primary-600 transition-all duration-200 transform hover:-translate-y-1 hover:scale-105 active:translate-y-0 active:scale-100 flex items-center">
+    <i class="fas fa-plus mr-2 drop-shadow"></i>Register Voter
+</a>
+                
+            </div>
+        </div>
+    </div>
+
+                 
+
+    <!-- Statistics Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-600">Total Voters</p>
+                    <p class="text-2xl font-bold text-gray-900">7828</p>
+                    <p class="text-xs text-green-600 mt-1">+6812 today</p>
+                </div>
+                <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
+                    <i class="fas fa-users text-blue-600 text-xl"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-600">Approved</p>
+                    <p class="text-2xl font-bold text-green-600">20</p>
+                    <p class="text-xs text-green-600 mt-1">0.3% of total</p>
+                </div>
+                <div class="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
+                    <i class="fas fa-check-circle text-green-600 text-xl"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-600">Pending</p>
+                    <p class="text-2xl font-bold text-orange-600">0</p>
+                    <p class="text-xs text-orange-600 mt-1">Awaiting review</p>
+                </div>
+                <div class="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center">
+                    <i class="fas fa-clock text-orange-600 text-xl"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-600">Rejected</p>
+                    <p class="text-2xl font-bold text-red-600">0</p>
+                    <p class="text-xs text-red-600 mt-1">Requires attention</p>
+                </div>
+                <div class="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center">
+                    <i class="fas fa-times-circle text-red-600 text-xl"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Filters and Search -->
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+        <form method="GET" action="https://cvrdashboardyobe.com/voters" class="grid grid-cols-1 md:grid-cols-6 gap-4">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Search</label>
+                <input type="text" name="search" value=""
+                       placeholder="Name, Voter ID..."
+                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
+                <select name="status" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+                    <option value="">All Status</option>
+                    <option value="pending" >Pending</option>
+                    <option value="approved" >Approved</option>
+                    <option value="rejected" >Rejected</option>
+                </select>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">State</label>
+                <select name="state_id" id="state_filter" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+                    <option value="">All States</option>
+                                            <option value="1" >Yobe</option>
+                                    </select>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Gender</label>
+                <select name="gender" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+                    <option value="">All Genders</option>
+                    <option value="male" >Male</option>
+                    <option value="female" >Female</option>
+                </select>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Age Group</label>
+                <select name="age_group" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+                    <option value="">All Ages</option>
+                    <option value="18-25" >18-25</option>
+                    <option value="26-35" >26-35</option>
+                    <option value="36-50" >36-50</option>
+                    <option value="51+" >51+</option>
+                </select>
+            </div>
+
+            <div class="flex items-end">
+                <button type="submit" class="px-4 py-2 bg-primary-500 text-white rounded-xl font-bold shadow-lg shadow-primary-300/40 border-b-4 border-primary-700 hover:bg-primary-600 transition-all duration-200 transform hover:-translate-y-1 hover:scale-105 active:translate-y-0 active:scale-100 flex items-center">
+                    <i class="fas fa-search mr-2"></i>Filter
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Voters List -->
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100">
+        <div class="p-6 border-b border-gray-100">
+            <div class="flex justify-between items-center">
+                <h3 class="text-lg font-semibold text-gray-900">All Voters</h3>
+                <div class="text-sm text-gray-600">
+                    Showing 1 to 20 of 7828 results
+                </div>
+            </div>
+        </div>
+
+        <div class="overflow-x-auto">
+            <table class="w-full">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="text-left py-4 px-6 font-semibold text-gray-900">Voter</th>
+                        <th class="text-left py-4 px-6 font-semibold text-gray-900">Voter ID</th>
+                        <th class="text-left py-4 px-6 font-semibold text-gray-900">Location</th>
+                        <th class="text-left py-4 px-6 font-semibold text-gray-900">Status</th>
+                        <th class="text-left py-4 px-6 font-semibold text-gray-900">Registered By</th>
+                        <th class="text-left py-4 px-6 font-semibold text-gray-900">Date</th>
+                        <th class="text-left py-4 px-6 font-semibold text-gray-900">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100">
+                                        <tr class="hover:bg-gray-50 transition-colors">
+                        <td class="py-4 px-6">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center">
+                                                                            <i class="fas fa-user text-primary-600 text-lg"></i>
+                                                                    </div>
+                                <div>
+                                    <a href="https://cvrdashboardyobe.com/voters/86362" class="font-medium text-gray-900 hover:text-primary-600">
+                                        Mohammed Muhusin
+                                    </a>
+                                    <div class="flex items-center gap-3 mt-1">
+                                        <span class="text-sm text-gray-600">20 years old</span>
+                                        <span class="text-sm text-gray-600">•</span>
+                                        <span class="text-sm text-gray-600">Male</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <span class="font-mono text-sm text-gray-900">32255498</span>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <div>
+                                <p class="text-sm font-medium text-gray-900">Sarkin zango umaru open space</p>
+                                <p class="text-xs text-gray-600">Zango ward, Bade</p>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <span class="px-3 py-1 text-xs font-medium rounded-full
+                                bg-green-100 text-green-800
+                                
+                                ">
+                                Approved
+                            </span>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <div class="flex items-center gap-3">
+                                <img src="https://ui-avatars.com/api/?name=Agent+5-+Bade&background=3b82f6&color=fff&size=32"
+                                     alt="Agent 5- Bade" class="w-8 h-8 rounded-full">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-900">Agent 5- Bade</p>
+                                    <p class="text-xs text-gray-600">Agent</p>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <div>
+                                <p class="text-sm text-gray-900">Sep 21, 2025</p>
+                                <p class="text-xs text-gray-600">07:52 AM</p>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <div class="flex items-center gap-2">
+                                <a href="https://cvrdashboardyobe.com/voters/86362"
+                                   class="p-2 text-gray-400 hover:text-primary-600 transition-colors"
+                                   title="View Details">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+
+                                
+                                                            </div>
+                        </td>
+                    </tr>
+                                        <tr class="hover:bg-gray-50 transition-colors">
+                        <td class="py-4 px-6">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center">
+                                                                            <i class="fas fa-user text-primary-600 text-lg"></i>
+                                                                    </div>
+                                <div>
+                                    <a href="https://cvrdashboardyobe.com/voters/86271" class="font-medium text-gray-900 hover:text-primary-600">
+                                        Mohammed Alhaji Abdulkarim
+                                    </a>
+                                    <div class="flex items-center gap-3 mt-1">
+                                        <span class="text-sm text-gray-600">20 years old</span>
+                                        <span class="text-sm text-gray-600">•</span>
+                                        <span class="text-sm text-gray-600">Male</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <span class="font-mono text-sm text-gray-900">Pre31799607</span>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <div>
+                                <p class="text-sm font-medium text-gray-900">Alh. Sidi Ali</p>
+                                <p class="text-xs text-gray-600">Bade Hausawa skn, Bade</p>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <span class="px-3 py-1 text-xs font-medium rounded-full
+                                bg-green-100 text-green-800
+                                
+                                ">
+                                Approved
+                            </span>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <div class="flex items-center gap-3">
+                                <img src="https://ui-avatars.com/api/?name=Agent+7+-+Bade&background=3b82f6&color=fff&size=32"
+                                     alt="Agent 7 - Bade" class="w-8 h-8 rounded-full">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-900">Agent 7 - Bade</p>
+                                    <p class="text-xs text-gray-600">Agent</p>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <div>
+                                <p class="text-sm text-gray-900">Sep 20, 2025</p>
+                                <p class="text-xs text-gray-600">10:22 PM</p>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <div class="flex items-center gap-2">
+                                <a href="https://cvrdashboardyobe.com/voters/86271"
+                                   class="p-2 text-gray-400 hover:text-primary-600 transition-colors"
+                                   title="View Details">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+
+                                
+                                                            </div>
+                        </td>
+                    </tr>
+                                        <tr class="hover:bg-gray-50 transition-colors">
+                        <td class="py-4 px-6">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center">
+                                                                            <i class="fas fa-user text-primary-600 text-lg"></i>
+                                                                    </div>
+                                <div>
+                                    <a href="https://cvrdashboardyobe.com/voters/86270" class="font-medium text-gray-900 hover:text-primary-600">
+                                        Khadija Ibrahim
+                                    </a>
+                                    <div class="flex items-center gap-3 mt-1">
+                                        <span class="text-sm text-gray-600">25 years old</span>
+                                        <span class="text-sm text-gray-600">•</span>
+                                        <span class="text-sm text-gray-600">Female</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <span class="font-mono text-sm text-gray-900">Pre32225555</span>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <div>
+                                <p class="text-sm font-medium text-gray-900">Islamiyya</p>
+                                <p class="text-xs text-gray-600">Bade Hausawa skn, Bade</p>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <span class="px-3 py-1 text-xs font-medium rounded-full
+                                bg-green-100 text-green-800
+                                
+                                ">
+                                Approved
+                            </span>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <div class="flex items-center gap-3">
+                                <img src="https://ui-avatars.com/api/?name=Agent+7+-+Bade&background=3b82f6&color=fff&size=32"
+                                     alt="Agent 7 - Bade" class="w-8 h-8 rounded-full">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-900">Agent 7 - Bade</p>
+                                    <p class="text-xs text-gray-600">Agent</p>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <div>
+                                <p class="text-sm text-gray-900">Sep 20, 2025</p>
+                                <p class="text-xs text-gray-600">10:12 PM</p>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <div class="flex items-center gap-2">
+                                <a href="https://cvrdashboardyobe.com/voters/86270"
+                                   class="p-2 text-gray-400 hover:text-primary-600 transition-colors"
+                                   title="View Details">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+
+                                
+                                                            </div>
+                        </td>
+                    </tr>
+                                        <tr class="hover:bg-gray-50 transition-colors">
+                        <td class="py-4 px-6">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center">
+                                                                            <i class="fas fa-user text-primary-600 text-lg"></i>
+                                                                    </div>
+                                <div>
+                                    <a href="https://cvrdashboardyobe.com/voters/86269" class="font-medium text-gray-900 hover:text-primary-600">
+                                        Aishatu Kabiru Wakil
+                                    </a>
+                                    <div class="flex items-center gap-3 mt-1">
+                                        <span class="text-sm text-gray-600">33 years old</span>
+                                        <span class="text-sm text-gray-600">•</span>
+                                        <span class="text-sm text-gray-600">Female</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <span class="font-mono text-sm text-gray-900">Pre32227532</span>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <div>
+                                <p class="text-sm font-medium text-gray-900">Islamiyya</p>
+                                <p class="text-xs text-gray-600">Bade Hausawa skn, Bade</p>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <span class="px-3 py-1 text-xs font-medium rounded-full
+                                bg-green-100 text-green-800
+                                
+                                ">
+                                Approved
+                            </span>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <div class="flex items-center gap-3">
+                                <img src="https://ui-avatars.com/api/?name=Agent+7+-+Bade&background=3b82f6&color=fff&size=32"
+                                     alt="Agent 7 - Bade" class="w-8 h-8 rounded-full">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-900">Agent 7 - Bade</p>
+                                    <p class="text-xs text-gray-600">Agent</p>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <div>
+                                <p class="text-sm text-gray-900">Sep 20, 2025</p>
+                                <p class="text-xs text-gray-600">10:09 PM</p>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <div class="flex items-center gap-2">
+                                <a href="https://cvrdashboardyobe.com/voters/86269"
+                                   class="p-2 text-gray-400 hover:text-primary-600 transition-colors"
+                                   title="View Details">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+
+                                
+                                                            </div>
+                        </td>
+                    </tr>
+                                        <tr class="hover:bg-gray-50 transition-colors">
+                        <td class="py-4 px-6">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center">
+                                                                            <i class="fas fa-user text-primary-600 text-lg"></i>
+                                                                    </div>
+                                <div>
+                                    <a href="https://cvrdashboardyobe.com/voters/85619" class="font-medium text-gray-900 hover:text-primary-600">
+                                        AJI SANI ABBA
+                                    </a>
+                                    <div class="flex items-center gap-3 mt-1">
+                                        <span class="text-sm text-gray-600">19 years old</span>
+                                        <span class="text-sm text-gray-600">•</span>
+                                        <span class="text-sm text-gray-600">Male</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <span class="font-mono text-sm text-gray-900">26288856</span>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <div>
+                                <p class="text-sm font-medium text-gray-900">Zango islamiya</p>
+                                <p class="text-xs text-gray-600">Zango ward, Bade</p>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <span class="px-3 py-1 text-xs font-medium rounded-full
+                                bg-green-100 text-green-800
+                                
+                                ">
+                                Approved
+                            </span>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <div class="flex items-center gap-3">
+                                <img src="https://ui-avatars.com/api/?name=Agent+5-+Bade&background=3b82f6&color=fff&size=32"
+                                     alt="Agent 5- Bade" class="w-8 h-8 rounded-full">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-900">Agent 5- Bade</p>
+                                    <p class="text-xs text-gray-600">Agent</p>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <div>
+                                <p class="text-sm text-gray-900">Sep 20, 2025</p>
+                                <p class="text-xs text-gray-600">09:20 AM</p>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <div class="flex items-center gap-2">
+                                <a href="https://cvrdashboardyobe.com/voters/85619"
+                                   class="p-2 text-gray-400 hover:text-primary-600 transition-colors"
+                                   title="View Details">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+
+                                
+                                                            </div>
+                        </td>
+                    </tr>
+                                        <tr class="hover:bg-gray-50 transition-colors">
+                        <td class="py-4 px-6">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center">
+                                                                            <i class="fas fa-user text-primary-600 text-lg"></i>
+                                                                    </div>
+                                <div>
+                                    <a href="https://cvrdashboardyobe.com/voters/85547" class="font-medium text-gray-900 hover:text-primary-600">
+                                        UMAR LABARAN
+                                    </a>
+                                    <div class="flex items-center gap-3 mt-1">
+                                        <span class="text-sm text-gray-600">55 years old</span>
+                                        <span class="text-sm text-gray-600">•</span>
+                                        <span class="text-sm text-gray-600">Male</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <span class="font-mono text-sm text-gray-900">26781061</span>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <div>
+                                <p class="text-sm font-medium text-gray-900">Sarkin zango umaru open space</p>
+                                <p class="text-xs text-gray-600">Zango ward, Bade</p>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <span class="px-3 py-1 text-xs font-medium rounded-full
+                                bg-green-100 text-green-800
+                                
+                                ">
+                                Approved
+                            </span>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <div class="flex items-center gap-3">
+                                <img src="https://ui-avatars.com/api/?name=Agent+5-+Bade&background=3b82f6&color=fff&size=32"
+                                     alt="Agent 5- Bade" class="w-8 h-8 rounded-full">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-900">Agent 5- Bade</p>
+                                    <p class="text-xs text-gray-600">Agent</p>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <div>
+                                <p class="text-sm text-gray-900">Sep 20, 2025</p>
+                                <p class="text-xs text-gray-600">07:09 AM</p>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <div class="flex items-center gap-2">
+                                <a href="https://cvrdashboardyobe.com/voters/85547"
+                                   class="p-2 text-gray-400 hover:text-primary-600 transition-colors"
+                                   title="View Details">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+
+                                
+                                                            </div>
+                        </td>
+                    </tr>
+                                        <tr class="hover:bg-gray-50 transition-colors">
+                        <td class="py-4 px-6">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center">
+                                                                            <i class="fas fa-user text-primary-600 text-lg"></i>
+                                                                    </div>
+                                <div>
+                                    <a href="https://cvrdashboardyobe.com/voters/85541" class="font-medium text-gray-900 hover:text-primary-600">
+                                        SULEIMAN USMAN
+                                    </a>
+                                    <div class="flex items-center gap-3 mt-1">
+                                        <span class="text-sm text-gray-600">26 years old</span>
+                                        <span class="text-sm text-gray-600">•</span>
+                                        <span class="text-sm text-gray-600">Male</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <span class="font-mono text-sm text-gray-900">26582446</span>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <div>
+                                <p class="text-sm font-medium text-gray-900">Sarkin zango umaru open space</p>
+                                <p class="text-xs text-gray-600">Zango ward, Bade</p>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <span class="px-3 py-1 text-xs font-medium rounded-full
+                                bg-green-100 text-green-800
+                                
+                                ">
+                                Approved
+                            </span>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <div class="flex items-center gap-3">
+                                <img src="https://ui-avatars.com/api/?name=Agent+5-+Bade&background=3b82f6&color=fff&size=32"
+                                     alt="Agent 5- Bade" class="w-8 h-8 rounded-full">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-900">Agent 5- Bade</p>
+                                    <p class="text-xs text-gray-600">Agent</p>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <div>
+                                <p class="text-sm text-gray-900">Sep 20, 2025</p>
+                                <p class="text-xs text-gray-600">07:04 AM</p>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <div class="flex items-center gap-2">
+                                <a href="https://cvrdashboardyobe.com/voters/85541"
+                                   class="p-2 text-gray-400 hover:text-primary-600 transition-colors"
+                                   title="View Details">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+
+                                
+                                                            </div>
+                        </td>
+                    </tr>
+                                        <tr class="hover:bg-gray-50 transition-colors">
+                        <td class="py-4 px-6">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center">
+                                                                            <i class="fas fa-user text-primary-600 text-lg"></i>
+                                                                    </div>
+                                <div>
+                                    <a href="https://cvrdashboardyobe.com/voters/85534" class="font-medium text-gray-900 hover:text-primary-600">
+                                        UMAR USMAN ABUBAKAR
+                                    </a>
+                                    <div class="flex items-center gap-3 mt-1">
+                                        <span class="text-sm text-gray-600">22 years old</span>
+                                        <span class="text-sm text-gray-600">•</span>
+                                        <span class="text-sm text-gray-600">Male</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <span class="font-mono text-sm text-gray-900">26139712</span>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <div>
+                                <p class="text-sm font-medium text-gray-900">Sarkin zango umaru open space</p>
+                                <p class="text-xs text-gray-600">Zango ward, Bade</p>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <span class="px-3 py-1 text-xs font-medium rounded-full
+                                bg-green-100 text-green-800
+                                
+                                ">
+                                Approved
+                            </span>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <div class="flex items-center gap-3">
+                                <img src="https://ui-avatars.com/api/?name=Agent+5-+Bade&background=3b82f6&color=fff&size=32"
+                                     alt="Agent 5- Bade" class="w-8 h-8 rounded-full">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-900">Agent 5- Bade</p>
+                                    <p class="text-xs text-gray-600">Agent</p>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <div>
+                                <p class="text-sm text-gray-900">Sep 20, 2025</p>
+                                <p class="text-xs text-gray-600">07:00 AM</p>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <div class="flex items-center gap-2">
+                                <a href="https://cvrdashboardyobe.com/voters/85534"
+                                   class="p-2 text-gray-400 hover:text-primary-600 transition-colors"
+                                   title="View Details">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+
+                                
+                                                            </div>
+                        </td>
+                    </tr>
+                                        <tr class="hover:bg-gray-50 transition-colors">
+                        <td class="py-4 px-6">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center">
+                                                                            <i class="fas fa-user text-primary-600 text-lg"></i>
+                                                                    </div>
+                                <div>
+                                    <a href="https://cvrdashboardyobe.com/voters/85521" class="font-medium text-gray-900 hover:text-primary-600">
+                                        MUHAMMED NASIRU HAUWA
+                                    </a>
+                                    <div class="flex items-center gap-3 mt-1">
+                                        <span class="text-sm text-gray-600">20 years old</span>
+                                        <span class="text-sm text-gray-600">•</span>
+                                        <span class="text-sm text-gray-600">Female</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <span class="font-mono text-sm text-gray-900">28978727</span>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <div>
+                                <p class="text-sm font-medium text-gray-900">Sarkin zango musa</p>
+                                <p class="text-xs text-gray-600">Zango ward, Bade</p>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <span class="px-3 py-1 text-xs font-medium rounded-full
+                                bg-green-100 text-green-800
+                                
+                                ">
+                                Approved
+                            </span>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <div class="flex items-center gap-3">
+                                <img src="https://ui-avatars.com/api/?name=Agent+5-+Bade&background=3b82f6&color=fff&size=32"
+                                     alt="Agent 5- Bade" class="w-8 h-8 rounded-full">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-900">Agent 5- Bade</p>
+                                    <p class="text-xs text-gray-600">Agent</p>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <div>
+                                <p class="text-sm text-gray-900">Sep 20, 2025</p>
+                                <p class="text-xs text-gray-600">06:50 AM</p>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <div class="flex items-center gap-2">
+                                <a href="https://cvrdashboardyobe.com/voters/85521"
+                                   class="p-2 text-gray-400 hover:text-primary-600 transition-colors"
+                                   title="View Details">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+
+                                
+                                                            </div>
+                        </td>
+                    </tr>
+                                        <tr class="hover:bg-gray-50 transition-colors">
+                        <td class="py-4 px-6">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center">
+                                                                            <i class="fas fa-user text-primary-600 text-lg"></i>
+                                                                    </div>
+                                <div>
+                                    <a href="https://cvrdashboardyobe.com/voters/85497" class="font-medium text-gray-900 hover:text-primary-600">
+                                        RABIU FATIMA
+                                    </a>
+                                    <div class="flex items-center gap-3 mt-1">
+                                        <span class="text-sm text-gray-600">35 years old</span>
+                                        <span class="text-sm text-gray-600">•</span>
+                                        <span class="text-sm text-gray-600">Female</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <span class="font-mono text-sm text-gray-900">28117587</span>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <div>
+                                <p class="text-sm font-medium text-gray-900">Sarkin zango musa</p>
+                                <p class="text-xs text-gray-600">Zango ward, Bade</p>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <span class="px-3 py-1 text-xs font-medium rounded-full
+                                bg-green-100 text-green-800
+                                
+                                ">
+                                Approved
+                            </span>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <div class="flex items-center gap-3">
+                                <img src="https://ui-avatars.com/api/?name=Agent+5-+Bade&background=3b82f6&color=fff&size=32"
+                                     alt="Agent 5- Bade" class="w-8 h-8 rounded-full">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-900">Agent 5- Bade</p>
+                                    <p class="text-xs text-gray-600">Agent</p>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <div>
+                                <p class="text-sm text-gray-900">Sep 20, 2025</p>
+                                <p class="text-xs text-gray-600">06:31 AM</p>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <div class="flex items-center gap-2">
+                                <a href="https://cvrdashboardyobe.com/voters/85497"
+                                   class="p-2 text-gray-400 hover:text-primary-600 transition-colors"
+                                   title="View Details">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+
+                                
+                                                            </div>
+                        </td>
+                    </tr>
+                                        <tr class="hover:bg-gray-50 transition-colors">
+                        <td class="py-4 px-6">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center">
+                                                                            <i class="fas fa-user text-primary-600 text-lg"></i>
+                                                                    </div>
+                                <div>
+                                    <a href="https://cvrdashboardyobe.com/voters/85487" class="font-medium text-gray-900 hover:text-primary-600">
+                                        HAMZA HABIBA
+                                    </a>
+                                    <div class="flex items-center gap-3 mt-1">
+                                        <span class="text-sm text-gray-600">23 years old</span>
+                                        <span class="text-sm text-gray-600">•</span>
+                                        <span class="text-sm text-gray-600">Female</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <span class="font-mono text-sm text-gray-900">28098634</span>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <div>
+                                <p class="text-sm font-medium text-gray-900">Sarkin zango umaru open space</p>
+                                <p class="text-xs text-gray-600">Zango ward, Bade</p>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <span class="px-3 py-1 text-xs font-medium rounded-full
+                                bg-green-100 text-green-800
+                                
+                                ">
+                                Approved
+                            </span>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <div class="flex items-center gap-3">
+                                <img src="https://ui-avatars.com/api/?name=Agent+5-+Bade&background=3b82f6&color=fff&size=32"
+                                     alt="Agent 5- Bade" class="w-8 h-8 rounded-full">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-900">Agent 5- Bade</p>
+                                    <p class="text-xs text-gray-600">Agent</p>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <div>
+                                <p class="text-sm text-gray-900">Sep 20, 2025</p>
+                                <p class="text-xs text-gray-600">06:18 AM</p>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <div class="flex items-center gap-2">
+                                <a href="https://cvrdashboardyobe.com/voters/85487"
+                                   class="p-2 text-gray-400 hover:text-primary-600 transition-colors"
+                                   title="View Details">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+
+                                
+                                                            </div>
+                        </td>
+                    </tr>
+                                        <tr class="hover:bg-gray-50 transition-colors">
+                        <td class="py-4 px-6">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center">
+                                                                            <i class="fas fa-user text-primary-600 text-lg"></i>
+                                                                    </div>
+                                <div>
+                                    <a href="https://cvrdashboardyobe.com/voters/85485" class="font-medium text-gray-900 hover:text-primary-600">
+                                        MUHAMMED LANTANA
+                                    </a>
+                                    <div class="flex items-center gap-3 mt-1">
+                                        <span class="text-sm text-gray-600">30 years old</span>
+                                        <span class="text-sm text-gray-600">•</span>
+                                        <span class="text-sm text-gray-600">Female</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <span class="font-mono text-sm text-gray-900">28072232</span>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <div>
+                                <p class="text-sm font-medium text-gray-900">Sarkin zango umaru open space</p>
+                                <p class="text-xs text-gray-600">Zango ward, Bade</p>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <span class="px-3 py-1 text-xs font-medium rounded-full
+                                bg-green-100 text-green-800
+                                
+                                ">
+                                Approved
+                            </span>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <div class="flex items-center gap-3">
+                                <img src="https://ui-avatars.com/api/?name=Agent+5-+Bade&background=3b82f6&color=fff&size=32"
+                                     alt="Agent 5- Bade" class="w-8 h-8 rounded-full">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-900">Agent 5- Bade</p>
+                                    <p class="text-xs text-gray-600">Agent</p>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <div>
+                                <p class="text-sm text-gray-900">Sep 20, 2025</p>
+                                <p class="text-xs text-gray-600">06:16 AM</p>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <div class="flex items-center gap-2">
+                                <a href="https://cvrdashboardyobe.com/voters/85485"
+                                   class="p-2 text-gray-400 hover:text-primary-600 transition-colors"
+                                   title="View Details">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+
+                                
+                                                            </div>
+                        </td>
+                    </tr>
+                                        <tr class="hover:bg-gray-50 transition-colors">
+                        <td class="py-4 px-6">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center">
+                                                                            <i class="fas fa-user text-primary-600 text-lg"></i>
+                                                                    </div>
+                                <div>
+                                    <a href="https://cvrdashboardyobe.com/voters/85483" class="font-medium text-gray-900 hover:text-primary-600">
+                                        AHMED MARYAM
+                                    </a>
+                                    <div class="flex items-center gap-3 mt-1">
+                                        <span class="text-sm text-gray-600">20 years old</span>
+                                        <span class="text-sm text-gray-600">•</span>
+                                        <span class="text-sm text-gray-600">Female</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <span class="font-mono text-sm text-gray-900">28066971</span>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <div>
+                                <p class="text-sm font-medium text-gray-900">Sarkin zango umaru open space</p>
+                                <p class="text-xs text-gray-600">Zango ward, Bade</p>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <span class="px-3 py-1 text-xs font-medium rounded-full
+                                bg-green-100 text-green-800
+                                
+                                ">
+                                Approved
+                            </span>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <div class="flex items-center gap-3">
+                                <img src="https://ui-avatars.com/api/?name=Agent+5-+Bade&background=3b82f6&color=fff&size=32"
+                                     alt="Agent 5- Bade" class="w-8 h-8 rounded-full">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-900">Agent 5- Bade</p>
+                                    <p class="text-xs text-gray-600">Agent</p>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <div>
+                                <p class="text-sm text-gray-900">Sep 20, 2025</p>
+                                <p class="text-xs text-gray-600">06:14 AM</p>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <div class="flex items-center gap-2">
+                                <a href="https://cvrdashboardyobe.com/voters/85483"
+                                   class="p-2 text-gray-400 hover:text-primary-600 transition-colors"
+                                   title="View Details">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+
+                                
+                                                            </div>
+                        </td>
+                    </tr>
+                                        <tr class="hover:bg-gray-50 transition-colors">
+                        <td class="py-4 px-6">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center">
+                                                                            <i class="fas fa-user text-primary-600 text-lg"></i>
+                                                                    </div>
+                                <div>
+                                    <a href="https://cvrdashboardyobe.com/voters/85481" class="font-medium text-gray-900 hover:text-primary-600">
+                                        MUHAMMED GARBA
+                                    </a>
+                                    <div class="flex items-center gap-3 mt-1">
+                                        <span class="text-sm text-gray-600">85 years old</span>
+                                        <span class="text-sm text-gray-600">•</span>
+                                        <span class="text-sm text-gray-600">Male</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <span class="font-mono text-sm text-gray-900">28062038</span>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <div>
+                                <p class="text-sm font-medium text-gray-900">Sarkin zango umaru open space</p>
+                                <p class="text-xs text-gray-600">Zango ward, Bade</p>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <span class="px-3 py-1 text-xs font-medium rounded-full
+                                bg-green-100 text-green-800
+                                
+                                ">
+                                Approved
+                            </span>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <div class="flex items-center gap-3">
+                                <img src="https://ui-avatars.com/api/?name=Agent+5-+Bade&background=3b82f6&color=fff&size=32"
+                                     alt="Agent 5- Bade" class="w-8 h-8 rounded-full">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-900">Agent 5- Bade</p>
+                                    <p class="text-xs text-gray-600">Agent</p>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <div>
+                                <p class="text-sm text-gray-900">Sep 20, 2025</p>
+                                <p class="text-xs text-gray-600">06:11 AM</p>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <div class="flex items-center gap-2">
+                                <a href="https://cvrdashboardyobe.com/voters/85481"
+                                   class="p-2 text-gray-400 hover:text-primary-600 transition-colors"
+                                   title="View Details">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+
+                                
+                                                            </div>
+                        </td>
+                    </tr>
+                                        <tr class="hover:bg-gray-50 transition-colors">
+                        <td class="py-4 px-6">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center">
+                                                                            <i class="fas fa-user text-primary-600 text-lg"></i>
+                                                                    </div>
+                                <div>
+                                    <a href="https://cvrdashboardyobe.com/voters/85479" class="font-medium text-gray-900 hover:text-primary-600">
+                                        MUHAMMED IBRAHIM
+                                    </a>
+                                    <div class="flex items-center gap-3 mt-1">
+                                        <span class="text-sm text-gray-600">80 years old</span>
+                                        <span class="text-sm text-gray-600">•</span>
+                                        <span class="text-sm text-gray-600">Male</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <span class="font-mono text-sm text-gray-900">28060356</span>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <div>
+                                <p class="text-sm font-medium text-gray-900">Sarkin zango umaru open space</p>
+                                <p class="text-xs text-gray-600">Zango ward, Bade</p>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <span class="px-3 py-1 text-xs font-medium rounded-full
+                                bg-green-100 text-green-800
+                                
+                                ">
+                                Approved
+                            </span>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <div class="flex items-center gap-3">
+                                <img src="https://ui-avatars.com/api/?name=Agent+5-+Bade&background=3b82f6&color=fff&size=32"
+                                     alt="Agent 5- Bade" class="w-8 h-8 rounded-full">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-900">Agent 5- Bade</p>
+                                    <p class="text-xs text-gray-600">Agent</p>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <div>
+                                <p class="text-sm text-gray-900">Sep 20, 2025</p>
+                                <p class="text-xs text-gray-600">06:09 AM</p>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <div class="flex items-center gap-2">
+                                <a href="https://cvrdashboardyobe.com/voters/85479"
+                                   class="p-2 text-gray-400 hover:text-primary-600 transition-colors"
+                                   title="View Details">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+
+                                
+                                                            </div>
+                        </td>
+                    </tr>
+                                        <tr class="hover:bg-gray-50 transition-colors">
+                        <td class="py-4 px-6">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center">
+                                                                            <i class="fas fa-user text-primary-600 text-lg"></i>
+                                                                    </div>
+                                <div>
+                                    <a href="https://cvrdashboardyobe.com/voters/85477" class="font-medium text-gray-900 hover:text-primary-600">
+                                        SALISU YAHAYA
+                                    </a>
+                                    <div class="flex items-center gap-3 mt-1">
+                                        <span class="text-sm text-gray-600">20 years old</span>
+                                        <span class="text-sm text-gray-600">•</span>
+                                        <span class="text-sm text-gray-600">Male</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <span class="font-mono text-sm text-gray-900">28056370</span>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <div>
+                                <p class="text-sm font-medium text-gray-900">Sarkin zango umaru open space</p>
+                                <p class="text-xs text-gray-600">Zango ward, Bade</p>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <span class="px-3 py-1 text-xs font-medium rounded-full
+                                bg-green-100 text-green-800
+                                
+                                ">
+                                Approved
+                            </span>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <div class="flex items-center gap-3">
+                                <img src="https://ui-avatars.com/api/?name=Agent+5-+Bade&background=3b82f6&color=fff&size=32"
+                                     alt="Agent 5- Bade" class="w-8 h-8 rounded-full">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-900">Agent 5- Bade</p>
+                                    <p class="text-xs text-gray-600">Agent</p>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <div>
+                                <p class="text-sm text-gray-900">Sep 20, 2025</p>
+                                <p class="text-xs text-gray-600">06:06 AM</p>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <div class="flex items-center gap-2">
+                                <a href="https://cvrdashboardyobe.com/voters/85477"
+                                   class="p-2 text-gray-400 hover:text-primary-600 transition-colors"
+                                   title="View Details">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+
+                                
+                                                            </div>
+                        </td>
+                    </tr>
+                                        <tr class="hover:bg-gray-50 transition-colors">
+                        <td class="py-4 px-6">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center">
+                                                                            <i class="fas fa-user text-primary-600 text-lg"></i>
+                                                                    </div>
+                                <div>
+                                    <a href="https://cvrdashboardyobe.com/voters/85474" class="font-medium text-gray-900 hover:text-primary-600">
+                                        SALISU SANI
+                                    </a>
+                                    <div class="flex items-center gap-3 mt-1">
+                                        <span class="text-sm text-gray-600">35 years old</span>
+                                        <span class="text-sm text-gray-600">•</span>
+                                        <span class="text-sm text-gray-600">Male</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <span class="font-mono text-sm text-gray-900">28055120</span>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <div>
+                                <p class="text-sm font-medium text-gray-900">Sarkin zango umaru open space</p>
+                                <p class="text-xs text-gray-600">Zango ward, Bade</p>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <span class="px-3 py-1 text-xs font-medium rounded-full
+                                bg-green-100 text-green-800
+                                
+                                ">
+                                Approved
+                            </span>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <div class="flex items-center gap-3">
+                                <img src="https://ui-avatars.com/api/?name=Agent+5-+Bade&background=3b82f6&color=fff&size=32"
+                                     alt="Agent 5- Bade" class="w-8 h-8 rounded-full">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-900">Agent 5- Bade</p>
+                                    <p class="text-xs text-gray-600">Agent</p>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <div>
+                                <p class="text-sm text-gray-900">Sep 20, 2025</p>
+                                <p class="text-xs text-gray-600">06:04 AM</p>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <div class="flex items-center gap-2">
+                                <a href="https://cvrdashboardyobe.com/voters/85474"
+                                   class="p-2 text-gray-400 hover:text-primary-600 transition-colors"
+                                   title="View Details">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+
+                                
+                                                            </div>
+                        </td>
+                    </tr>
+                                        <tr class="hover:bg-gray-50 transition-colors">
+                        <td class="py-4 px-6">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center">
+                                                                            <i class="fas fa-user text-primary-600 text-lg"></i>
+                                                                    </div>
+                                <div>
+                                    <a href="https://cvrdashboardyobe.com/voters/85108" class="font-medium text-gray-900 hover:text-primary-600">
+                                        Shuaibu Umar
+                                    </a>
+                                    <div class="flex items-center gap-3 mt-1">
+                                        <span class="text-sm text-gray-600">22 years old</span>
+                                        <span class="text-sm text-gray-600">•</span>
+                                        <span class="text-sm text-gray-600">Male</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <span class="font-mono text-sm text-gray-900">Pre31805134</span>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <div>
+                                <p class="text-sm font-medium text-gray-900">Alh. Sidi Ali</p>
+                                <p class="text-xs text-gray-600">Bade Hausawa skn, Bade</p>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <span class="px-3 py-1 text-xs font-medium rounded-full
+                                bg-green-100 text-green-800
+                                
+                                ">
+                                Approved
+                            </span>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <div class="flex items-center gap-3">
+                                <img src="https://ui-avatars.com/api/?name=Agent+7+-+Bade&background=3b82f6&color=fff&size=32"
+                                     alt="Agent 7 - Bade" class="w-8 h-8 rounded-full">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-900">Agent 7 - Bade</p>
+                                    <p class="text-xs text-gray-600">Agent</p>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <div>
+                                <p class="text-sm text-gray-900">Sep 19, 2025</p>
+                                <p class="text-xs text-gray-600">02:45 PM</p>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <div class="flex items-center gap-2">
+                                <a href="https://cvrdashboardyobe.com/voters/85108"
+                                   class="p-2 text-gray-400 hover:text-primary-600 transition-colors"
+                                   title="View Details">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+
+                                
+                                                            </div>
+                        </td>
+                    </tr>
+                                        <tr class="hover:bg-gray-50 transition-colors">
+                        <td class="py-4 px-6">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center">
+                                                                            <i class="fas fa-user text-primary-600 text-lg"></i>
+                                                                    </div>
+                                <div>
+                                    <a href="https://cvrdashboardyobe.com/voters/85104" class="font-medium text-gray-900 hover:text-primary-600">
+                                        Mukaddasu Sani
+                                    </a>
+                                    <div class="flex items-center gap-3 mt-1">
+                                        <span class="text-sm text-gray-600">30 years old</span>
+                                        <span class="text-sm text-gray-600">•</span>
+                                        <span class="text-sm text-gray-600">Male</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <span class="font-mono text-sm text-gray-900">Pre31801555</span>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <div>
+                                <p class="text-sm font-medium text-gray-900">Alh. Sidi Ali</p>
+                                <p class="text-xs text-gray-600">Bade Hausawa skn, Bade</p>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <span class="px-3 py-1 text-xs font-medium rounded-full
+                                bg-green-100 text-green-800
+                                
+                                ">
+                                Approved
+                            </span>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <div class="flex items-center gap-3">
+                                <img src="https://ui-avatars.com/api/?name=Agent+7+-+Bade&background=3b82f6&color=fff&size=32"
+                                     alt="Agent 7 - Bade" class="w-8 h-8 rounded-full">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-900">Agent 7 - Bade</p>
+                                    <p class="text-xs text-gray-600">Agent</p>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <div>
+                                <p class="text-sm text-gray-900">Sep 19, 2025</p>
+                                <p class="text-xs text-gray-600">02:44 PM</p>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <div class="flex items-center gap-2">
+                                <a href="https://cvrdashboardyobe.com/voters/85104"
+                                   class="p-2 text-gray-400 hover:text-primary-600 transition-colors"
+                                   title="View Details">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+
+                                
+                                                            </div>
+                        </td>
+                    </tr>
+                                        <tr class="hover:bg-gray-50 transition-colors">
+                        <td class="py-4 px-6">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center">
+                                                                            <i class="fas fa-user text-primary-600 text-lg"></i>
+                                                                    </div>
+                                <div>
+                                    <a href="https://cvrdashboardyobe.com/voters/85101" class="font-medium text-gray-900 hover:text-primary-600">
+                                        Hassana Abdulkarim
+                                    </a>
+                                    <div class="flex items-center gap-3 mt-1">
+                                        <span class="text-sm text-gray-600">18 years old</span>
+                                        <span class="text-sm text-gray-600">•</span>
+                                        <span class="text-sm text-gray-600">Female</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <span class="font-mono text-sm text-gray-900">Pre31796218</span>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <div>
+                                <p class="text-sm font-medium text-gray-900">Alh. Sidi Ali</p>
+                                <p class="text-xs text-gray-600">Bade Hausawa skn, Bade</p>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <span class="px-3 py-1 text-xs font-medium rounded-full
+                                bg-green-100 text-green-800
+                                
+                                ">
+                                Approved
+                            </span>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <div class="flex items-center gap-3">
+                                <img src="https://ui-avatars.com/api/?name=Agent+7+-+Bade&background=3b82f6&color=fff&size=32"
+                                     alt="Agent 7 - Bade" class="w-8 h-8 rounded-full">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-900">Agent 7 - Bade</p>
+                                    <p class="text-xs text-gray-600">Agent</p>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <div>
+                                <p class="text-sm text-gray-900">Sep 19, 2025</p>
+                                <p class="text-xs text-gray-600">02:42 PM</p>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <div class="flex items-center gap-2">
+                                <a href="https://cvrdashboardyobe.com/voters/85101"
+                                   class="p-2 text-gray-400 hover:text-primary-600 transition-colors"
+                                   title="View Details">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+
+                                
+                                                            </div>
+                        </td>
+                    </tr>
+                                    </tbody>
+            </table>
+        </div>
+
+                <div class="px-6 py-4 border-t border-gray-100">
+            <nav role="navigation" aria-label="Pagination Navigation" class="flex items-center justify-between">
+        <div class="flex justify-between flex-1 sm:hidden">
+                            <span class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 cursor-default leading-5 rounded-md dark:text-gray-600 dark:bg-gray-800 dark:border-gray-600">
+                    &laquo; Previous
+                </span>
+            
+                            <a href="https://cvrdashboardyobe.com/voters?page=2" class="relative inline-flex items-center px-4 py-2 ml-3 text-sm font-medium text-gray-700 bg-white border border-gray-300 leading-5 rounded-md hover:text-gray-500 focus:outline-none focus:ring ring-gray-300 focus:border-blue-300 active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-300 dark:focus:border-blue-700 dark:active:bg-gray-700 dark:active:text-gray-300">
+                    Next &raquo;
+                </a>
+                    </div>
+
+        <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+            <div>
+                <p class="text-sm text-gray-700 leading-5 dark:text-gray-400">
+                    Showing
+                                            <span class="font-medium">1</span>
+                        to
+                        <span class="font-medium">20</span>
+                                        of
+                    <span class="font-medium">7828</span>
+                    results
+                </p>
+            </div>
+
+            <div>
+                <span class="relative z-0 inline-flex rtl:flex-row-reverse shadow-sm rounded-md">
+                    
+                                            <span aria-disabled="true" aria-label="&amp;laquo; Previous">
+                            <span class="relative inline-flex items-center px-2 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 cursor-default rounded-l-md leading-5 dark:bg-gray-800 dark:border-gray-600" aria-hidden="true">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+                                </svg>
+                            </span>
+                        </span>
+                    
+                    
+                                            
+                        
+                        
+                                                                                                                        <span aria-current="page">
+                                        <span class="relative inline-flex items-center px-4 py-2 -ml-px text-sm font-medium text-gray-500 bg-white border border-gray-300 cursor-default leading-5 dark:bg-gray-800 dark:border-gray-600">1</span>
+                                    </span>
+                                                                                                                                <a href="https://cvrdashboardyobe.com/voters?page=2" class="relative inline-flex items-center px-4 py-2 -ml-px text-sm font-medium text-gray-700 bg-white border border-gray-300 leading-5 hover:text-gray-500 focus:z-10 focus:outline-none focus:ring ring-gray-300 focus:border-blue-300 active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400 dark:hover:text-gray-300 dark:active:bg-gray-700 dark:focus:border-blue-800" aria-label="Go to page 2">
+                                        2
+                                    </a>
+                                                                                                                                <a href="https://cvrdashboardyobe.com/voters?page=3" class="relative inline-flex items-center px-4 py-2 -ml-px text-sm font-medium text-gray-700 bg-white border border-gray-300 leading-5 hover:text-gray-500 focus:z-10 focus:outline-none focus:ring ring-gray-300 focus:border-blue-300 active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400 dark:hover:text-gray-300 dark:active:bg-gray-700 dark:focus:border-blue-800" aria-label="Go to page 3">
+                                        3
+                                    </a>
+                                                                                                                                <a href="https://cvrdashboardyobe.com/voters?page=4" class="relative inline-flex items-center px-4 py-2 -ml-px text-sm font-medium text-gray-700 bg-white border border-gray-300 leading-5 hover:text-gray-500 focus:z-10 focus:outline-none focus:ring ring-gray-300 focus:border-blue-300 active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400 dark:hover:text-gray-300 dark:active:bg-gray-700 dark:focus:border-blue-800" aria-label="Go to page 4">
+                                        4
+                                    </a>
+                                                                                                                                <a href="https://cvrdashboardyobe.com/voters?page=5" class="relative inline-flex items-center px-4 py-2 -ml-px text-sm font-medium text-gray-700 bg-white border border-gray-300 leading-5 hover:text-gray-500 focus:z-10 focus:outline-none focus:ring ring-gray-300 focus:border-blue-300 active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400 dark:hover:text-gray-300 dark:active:bg-gray-700 dark:focus:border-blue-800" aria-label="Go to page 5">
+                                        5
+                                    </a>
+                                                                                                                                <a href="https://cvrdashboardyobe.com/voters?page=6" class="relative inline-flex items-center px-4 py-2 -ml-px text-sm font-medium text-gray-700 bg-white border border-gray-300 leading-5 hover:text-gray-500 focus:z-10 focus:outline-none focus:ring ring-gray-300 focus:border-blue-300 active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400 dark:hover:text-gray-300 dark:active:bg-gray-700 dark:focus:border-blue-800" aria-label="Go to page 6">
+                                        6
+                                    </a>
+                                                                                                                                <a href="https://cvrdashboardyobe.com/voters?page=7" class="relative inline-flex items-center px-4 py-2 -ml-px text-sm font-medium text-gray-700 bg-white border border-gray-300 leading-5 hover:text-gray-500 focus:z-10 focus:outline-none focus:ring ring-gray-300 focus:border-blue-300 active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400 dark:hover:text-gray-300 dark:active:bg-gray-700 dark:focus:border-blue-800" aria-label="Go to page 7">
+                                        7
+                                    </a>
+                                                                                                                                <a href="https://cvrdashboardyobe.com/voters?page=8" class="relative inline-flex items-center px-4 py-2 -ml-px text-sm font-medium text-gray-700 bg-white border border-gray-300 leading-5 hover:text-gray-500 focus:z-10 focus:outline-none focus:ring ring-gray-300 focus:border-blue-300 active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400 dark:hover:text-gray-300 dark:active:bg-gray-700 dark:focus:border-blue-800" aria-label="Go to page 8">
+                                        8
+                                    </a>
+                                                                                                                                <a href="https://cvrdashboardyobe.com/voters?page=9" class="relative inline-flex items-center px-4 py-2 -ml-px text-sm font-medium text-gray-700 bg-white border border-gray-300 leading-5 hover:text-gray-500 focus:z-10 focus:outline-none focus:ring ring-gray-300 focus:border-blue-300 active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400 dark:hover:text-gray-300 dark:active:bg-gray-700 dark:focus:border-blue-800" aria-label="Go to page 9">
+                                        9
+                                    </a>
+                                                                                                                                <a href="https://cvrdashboardyobe.com/voters?page=10" class="relative inline-flex items-center px-4 py-2 -ml-px text-sm font-medium text-gray-700 bg-white border border-gray-300 leading-5 hover:text-gray-500 focus:z-10 focus:outline-none focus:ring ring-gray-300 focus:border-blue-300 active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400 dark:hover:text-gray-300 dark:active:bg-gray-700 dark:focus:border-blue-800" aria-label="Go to page 10">
+                                        10
+                                    </a>
+                                                                                                                                
+                                                    <span aria-disabled="true">
+                                <span class="relative inline-flex items-center px-4 py-2 -ml-px text-sm font-medium text-gray-700 bg-white border border-gray-300 cursor-default leading-5 dark:bg-gray-800 dark:border-gray-600">...</span>
+                            </span>
+                        
+                        
+                                                                    
+                        
+                        
+                                                                                                                        <a href="https://cvrdashboardyobe.com/voters?page=391" class="relative inline-flex items-center px-4 py-2 -ml-px text-sm font-medium text-gray-700 bg-white border border-gray-300 leading-5 hover:text-gray-500 focus:z-10 focus:outline-none focus:ring ring-gray-300 focus:border-blue-300 active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400 dark:hover:text-gray-300 dark:active:bg-gray-700 dark:focus:border-blue-800" aria-label="Go to page 391">
+                                        391
+                                    </a>
+                                                                                                                                <a href="https://cvrdashboardyobe.com/voters?page=392" class="relative inline-flex items-center px-4 py-2 -ml-px text-sm font-medium text-gray-700 bg-white border border-gray-300 leading-5 hover:text-gray-500 focus:z-10 focus:outline-none focus:ring ring-gray-300 focus:border-blue-300 active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400 dark:hover:text-gray-300 dark:active:bg-gray-700 dark:focus:border-blue-800" aria-label="Go to page 392">
+                                        392
+                                    </a>
+                                                                                                        
+                    
+                                            <a href="https://cvrdashboardyobe.com/voters?page=2" rel="next" class="relative inline-flex items-center px-2 py-2 -ml-px text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-r-md leading-5 hover:text-gray-400 focus:z-10 focus:outline-none focus:ring ring-gray-300 focus:border-blue-300 active:bg-gray-100 active:text-gray-500 transition ease-in-out duration-150 dark:bg-gray-800 dark:border-gray-600 dark:active:bg-gray-700 dark:focus:border-blue-800" aria-label="Next &amp;raquo;">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                            </svg>
+                        </a>
+                                    </span>
+            </div>
+        </div>
+    </nav>
+
+        </div>
+            </div>
+</div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Logout Form -->
+        <form id="logout-form" action="https://cvrdashboardyobe.com/logout" method="POST" class="hidden">
+        <input type="hidden" name="_token" value="6c2nL6pB3trqnRM4fDQpM4Qls2FwybA2VBD96OPZ" autocomplete="off">    </form>
+    
+    <!-- Mobile Sidebar Overlay -->
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden hidden" onclick="toggleSidebar()"></div>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.w-64');
+            const overlay = document.getElementById('sidebar-overlay');
+
+            if (sidebar.classList.contains('-translate-x-full')) {
+                sidebar.classList.remove('-translate-x-full');
+                overlay.classList.remove('hidden');
+            } else {
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('hidden');
+            }
+        }
+
+        // Auto-hide alerts after 5 seconds
+        setTimeout(function() {
+            const alerts = document.querySelectorAll('.m-4');
+            alerts.forEach(function(alert) {
+                if (alert.querySelector('.bg-green-50, .bg-red-50, .bg-yellow-50')) {
+                    alert.remove();
+                }
+            });
+        }, 5000);
+    </script>
+
+                    <script>
+// Auto-submit form when filters change
+document.querySelectorAll('select[name="status"], select[name="gender"], select[name="age_group"]').forEach(select => {
+    select.addEventListener('change', function() {
+        this.closest('form').submit();
+    });
+});
+
+// Cascading dropdowns for location
+document.getElementById('state_filter').addEventListener('change', function() {
+    const stateId = this.value;
+    if (stateId) {
+        // You can add AJAX call here to populate LGA dropdown
+        console.log('State selected:', stateId);
+    }
+});
+</script>
+                <script src="https://cvrdashboardyobe.com/vendor/livewire/livewire.min.js?id=df3a17f2"   data-csrf="6c2nL6pB3trqnRM4fDQpM4Qls2FwybA2VBD96OPZ" data-update-uri="/livewire/update" data-navigate-once="true"></script>
+            </body>
+            </html>
